@@ -88,6 +88,23 @@
                             </div>
                         </div>
                     </form>
+                    <div class="row">
+                        <div class="col-12">
+                            <h3 class="title">Job Details</h3>
+                            <button class="btn btn-sm btn-primary float-right" type="button" id="job-detail-button"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="col-12">
+                            <table id="job-details-table" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
                     <hr>
                     <h3 class="title my-1">Company Information</h3>
                     <div class="row">
@@ -123,29 +140,69 @@
 
     {{-- Modals --}}
     <div class="modal fade" id="search-company-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Select Company</h5>
-            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <table class="table table-bordered" id="selection-company-table">
-                <thead>
-                    <th>Logo</th>
-                    <th>Company Name</th>
-                    <th>URL</th>
-                    <th>Address</th>
-                    <th>Action</th>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Select Company</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" id="selection-company-table">
+                    <thead>
+                        <th>Logo</th>
+                        <th>Company Name</th>
+                        <th>URL</th>
+                        <th>Address</th>
+                        <th>Action</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="job-detail-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Job Detail</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>Type:</label>
+                            <select name="job-detail-type" class="form-control form-control-sm">
+                                <option selected disabled>--Select Type--</option>
+                                <option value="Responsibilities">Responsibilities</option>
+                                <option value="Education">Education</option>
+                                <option value="Experience">Experience</option>
+                                <option value="Benefits">Benefits</option>
+                            </select>
+                            <span class="error-message text-danger text-sm"></span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea name="job-detail-details" class="form-control form-control-sm" cols="3" rows="3"></textarea>
+                            <span class="error-message text-danger text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="add-job-detail-button">Add</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
     </div>
     {{-- Modals --}}
 @endsection

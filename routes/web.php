@@ -65,7 +65,5 @@ Route::get('logout2', function() {
     Auth::logout();
 });
 
-Route::get('slug', array(Slug::class, 'generate'));
-
 
 

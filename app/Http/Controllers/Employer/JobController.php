@@ -88,7 +88,7 @@ class JobController extends Controller
                 return response()->json(array("result" => false, "message" => "Validation Error!", "errors" => $validator->errors()->toArray(), "status" => 422));
             }
 
-            DB::table('jobs')->insert(array(
+            $jobid = DB::table('jobs')->insertGetId(array(
                 'company_id' => $data[0]['company'],
                 'employer_id' => $employer->id,
                 'job_category_id' => $data[0]['category'],
@@ -102,11 +102,20 @@ class JobController extends Controller
                 'created_at' => now()
             ));
 
+            foreach($request->job_details AS $item) {
+                DB::table("job_details")->insert([
+                    "job_id" => $jobid,
+                    "type" => $item['type'],
+                    "details" => $item['details'],
+                    "created_at" => now()
+                ]);
+            }
+
             DB::commit();
             return response()->json(array("result" => true, "message" => "Saved.", "data" => []));
         } catch(Exception $e) {
             DB::rollBack();
-            return response()->json(array("result" => false, "message" => [], "data" => $e));
+            return response()->json(array("result" => false, "message" => [], "data" => []));
         }
     }
 }

@@ -15,7 +15,18 @@ class JobController extends Controller
 
     public function view(string $uuid) 
     {
-        $job = DB::table('jobs AS a')->join('companies AS b','a.company_id','=','b.id')->join('employers AS c','a.employer_id','=','c.id')->join('users AS d','c.user_id','=','d.id')->select('a.id','title','a.description','min_salary','max_salary','location','arrangement','b.name AS company_name','b.url AS company_url','a.employer_id','d.first_name AS employer_fname','d.middle_name AS employer_mname', 'd.last_name AS employer_lname')->whereIn('a.status',array('Active','Pending'))->where('a.slug', $uuid)->first();
-        return view('applicant.job.view', array('job' => $job));
+        $data = array("info" => [], "details" => []);;
+        $job = DB::table("jobs AS a")->join('companies AS b','a.company_id','=','b.id')->join('employers AS c','a.employer_id','=','c.id')->join('users AS d','c.user_id','=','d.id')->select('a.id','title','a.description','min_salary','max_salary','location','arrangement','b.name AS company_name','b.url AS company_url','a.employer_id','d.first_name AS employer_fname','d.middle_name AS employer_mname', 'd.last_name AS employer_lname')->whereIn('a.status',array('Active','Pending'))->where('a.slug', $uuid)->first();
+        $details = DB::table("job_details")->select("type","details","created_at")->where("job_id",$job->id)->get()->groupBy("type");
+
+        foreach($job AS $key => $item) {
+            $data["info"][$key] = $item;
+        }
+        
+        foreach($details AS $key => $item) {
+            $data["details"][$key] = $item;
+        }
+
+        return view('applicant.job.view', array('data' => $data));
     }
 }

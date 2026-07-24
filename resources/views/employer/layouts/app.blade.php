@@ -275,7 +275,7 @@
                     {data: "company_name"},
                     {data: function(e) {
                         let badge = "";
-                        let data = {"Onsite": "success","Work from Home": "primary","Hybrid": "secondary"};
+                        let data = {"Onsite": "success","Work From Home": "primary","Hybrid": "secondary"};
 
                         $.each(data, function(key, item) {
                             if (e.arrangement == key) {
@@ -421,19 +421,63 @@
                             timer: 3000
                         });
                     }
-                });
+                }); 
+            });
+
+            $("#job-detail-button").on("click", function() {
+                $("#job-detail-modal").modal("show");
+            });
+
+            $("#add-job-detail-button").on("click", function() {
+                let bool = false;
+                let type = $("select[name=job-detail-type]");
+                let details = $("textarea[name=job-detail-details]");
+
+                let attr = [
+                    {field: $("select[name=job-detail-type]"), message: "Field is required"},
+                    {field: $("textarea[name=job-detail-details]"), message: "Field is required"}
+                ];
                 
-            })
+                $.each(attr, function(key, item) {
+                    item.field.removeClass("is-invalid");
+                    item.field.closest(".form-group").find(".error-message").text("");
+
+                    if(item.field.val() == "") {
+                        bool = true;
+                        item.field.addClass("is-invalid");
+                        item.field.closest(".form-group").find(".error-message").text(item.message);
+                    }  
+                });
+
+                if(bool) {
+                    return;
+                }
+
+                jobdetailstable.row.add({"type": type.val(), "details": details.val()}).draw();
+                $("select[name=job-detail-type] option:first").prop("selected",true);
+                details.val("");
+                $("#job-detail-modal").modal("hide");
+            });
 
             $(".post-job-btn").on("click", function() {
                 let job = [];
                 let company = [];
+                let jobdetail = [];
                 let formdata = new FormData($("#create-job-form")[0]);
                 let requiredFields = ['category', 'title', 'location' ,'arrangement', 'min_salary', 'max_salary', 'description'];
                 formdata = Object.fromEntries(formdata);
                 job.push(formdata);
 
-                $.map(profilecompanytable.rows().data().toArray(), function(item) {
+                $.map(jobdetailstable.rows().data(), function(item) {
+                    jobdetail.push(item);
+                });
+
+                if(jobdetail.length == 0) {
+                    Swal.fire("Warning!", "Add atleast one job detail", "info");
+                    return;
+                }
+
+                $.map(profilecompanytable.rows().data(), function(item) {
                     company.push(item);
                 });
 
@@ -460,7 +504,8 @@
                     },
                     data: {
                         job: job,
-                        company: company
+                        company: company,
+                        job_details: jobdetail
                     },
                     success: function(e) {
                         if(e.result) {
@@ -487,6 +532,19 @@
                         });
                     }
                 });
+
+            });
+
+            let jobdetailstable = $("#job-details-table").DataTable({
+                data: [],
+                columns: [
+                    {data: "type"},
+                    {data: "details"}
+                ],
+                info: false,
+                paging: false,
+                ordering: false,
+                searching: false
 
             });
 

@@ -32,20 +32,20 @@
                                 <a href="#" style="border-radius: 4px; overflow: hidden;"><img src="https://placehold.net/600x600.png" alt="Company Logo"></a>
                             </div>
                             <div class="salary-type col-auto order-sm-3">
-                                <span class="salary-range">$ {{number_format($job->min_salary,0,".",",")}}-{{number_format($job->max_salary,0,".",",") }}</span>
-                                <span class="job-arrangement badge badge-success">{{ $job->arrangement }}</span>
+                                <span class="salary-range">$ {{number_format($data["info"]["min_salary"],0,".",",")}}-{{number_format($data["info"]["max_salary"],0,".",",") }}</span>
+                                <span class="job-arrangement badge badge-success">{{ $data["info"]["arrangement"] }}</span>
                             </div>
                             <div class="content col">
-                                <h5 class="title">{{ $job->title }}</h5>
+                                <h5 class="title">{{ $data["info"]["title"] }}</h5>
                                 <ul class="meta">
                                     <li>
-                                        <strong><i class="lni lni-website mr-2"></i><span>{{ $job->company_name }}</span></strong>
+                                        <strong><i class="lni lni-website mr-2"></i><span>{{ $data["info"]["company_name"] }}</span></strong>
                                     </li>
                                     <li>
-                                        <strong><i class="lni lni-user mr-1"></i><span>{{ $job->employer_fname }} {{ $job->employer_mname }} {{ $job->employer_lname }}</span></strong>
+                                        <strong><i class="lni lni-user mr-1"></i><span>{{ $data["info"]["employer_fname"] }} {{ $data["info"]["employer_mname"] }} {{ $data["info"]["employer_lname"] }}</span></strong>
                                     </li>
                                     <li> 
-                                        <strong><i class="lni lni-map-marker mr-1"></i><span>{{ $job->location }}</span></strong>
+                                        <strong><i class="lni lni-map-marker mr-1"></i><span>{{ $data["info"]["location"] }}</span></strong>
                                     </li>
                                 </ul>
                             </div>
@@ -54,48 +54,17 @@
                         <div class="job-details-body">
                             <h6 class="mb-3">Job Description</h6>
                             <p>
-                                {{ $job->description }}
-                            </p>
-                            <h6 class="mb-3 mt-4">Responsibilities</h6>
-                            <ul>
-                                <li>Proven work experienceas a web designer</li>
-                                <li>Demonstrable graphic design skills with a strong portfolio</li>
-                                <li>Proficiency in HTML, CSS and JavaScript for rapid prototyping</li>
-                                <li>Experience working in an Agile/Scrum development process</li>
-                                <li>Proven work experienceas a web designer</li>
-                                <li>Excellent visual design skills with sensitivity to user-system interaction</li>
-                                <li>Ability to solve problems creatively and effectively</li>
-                                <li>Proven work experienceas a web designer</li>
-                                <li>Up-to-date with the latest Web trends, techniques and technologies</li>
-                                <li>BS/MS in Human-Computer Interaction, Interaction Design or a Visual Arts subject
-                                </li>
-                            </ul>
-                            <h6 class="mb-3 mt-4">Education + Experience</h6>
-                            <ul>
-                                <li>Advanced degree or equivalent experience in graphic and web design</li>
-                                <li>3 or more years of professional design experience</li>
-                                <li>Direct response email experience</li>
-                                <li>Ecommerce website design experience</li>
-                                <li>Familiarity with mobile and web apps preferred</li>
-                                <li>Excellent communication skills, most notably a demonstrated ability to solicit and
-                                    address creative and design feedback</li>
-                                <li>Must be able to work under pressure and meet deadlines while maintaining a positive
-                                    attitude and providing exemplary customer service</li>
-                                <li>Ability to work independently and to carry out assignments to completion within
-                                    parameters of instructions given, prescribed routines, and standard accepted
-                                    practices</li>
-                            </ul>
-                            <h6 class="mb-3 mt-4">Benefits</h6>
-                            <ul>
-                                <li>Medical insurance</li>
-                                <li>Dental insurance</li>
-                                <li>Vision insurance</li>
-                                <li>Supplemental benefits (Short Term Disability, Cancer &amp; Accident).</li>
-                                <li>Employer-sponsored Basic Life &amp; AD&amp;D Insurance</li>
-                                <li>Employer-sponsored Long Term Disability</li>
-                                <li>Employer-sponsored Value Adds – Fresh Beanies</li>
-                                <li>401(k)with matching</li>
-                            </ul>
+                                {{ $data["info"]["description"] }}
+                            </p>  
+                                         
+                            @foreach ($data["details"] as $title => $item)
+                                <h6 class="mb-3 mt-4">{{ $title }}</h6>
+                                @foreach ($item as $itemx)
+                                    <ul>
+                                        <li>{{ $itemx->details }}</li>
+                                    </ul>
+                                @endforeach
+                            @endforeach
                         </div>
                     </div>
                 </div>
