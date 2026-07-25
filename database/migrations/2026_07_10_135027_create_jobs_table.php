@@ -25,6 +25,9 @@ class CreateJobsTable extends Migration
             $table->decimal('min_salary',10,2);
             $table->decimal('max_salary',10,2);
             $table->enum('status', array('Pending','Approved', 'Closed'))->default('Pending');
+            $table->integer('slot');
+            $table->date('application_deadline');
+            $table->enum('employment_type', array('Part-time','Full-time'));
             $table->string('slug');
             $table->timestamps();
         });

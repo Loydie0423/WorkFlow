@@ -78,16 +78,45 @@
                                     </div>
                                 </div>
                             </div>
-                        <div class="row my-1">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label>Job Description*</label>
-                                    <textarea name="description" class="form-control" rows="5" placeholder="Enter Description"></textarea>
-                                    <span class="message text-sm text-danger"></span>
+
+                            <div class="row my-1">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Employment Type*</label>
+                                        <select name="employment_type" class="form-control">
+                                            <option value="Full-time">Full-time</option>
+                                            <option value="Part-time">Part-time</option>
+                                        </select>
+                                        <span class="message text-sm text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Slot*</label>
+                                        <input type="number" name="slot" class="form-control" placeholder="Enter Slot">
+                                        <span class="message text-sm text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Application Deadline*</label>
+                                        <input type="date" name="application_deadline" class="form-control">
+                                        <span class="message text-sm text-danger"></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+
+                            <div class="row my-1">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Job Description*</label>
+                                        <textarea name="description" class="form-control" rows="5" placeholder="Enter Description"></textarea>
+                                        <span class="message text-sm text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
                     </form>
+                    <hr>
                     <div class="row">
                         <div class="col-12">
                             <h3 class="title">Job Details</h3>

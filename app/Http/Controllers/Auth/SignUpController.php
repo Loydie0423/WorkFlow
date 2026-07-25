@@ -42,13 +42,9 @@ class SignUpController extends Controller
                 'created_at' => now()
             ));
 
-            if($request->account_type == 2) {
-                DB::table('employers')->insert(array(
-                    'user_id' => $userid,
-                    'created_at' => now()
-                ));
-            }
- 
+            $table = $request->account_type == 2 ? "employers" : "applicants";
+            DB::table($table)->insert(array('user_id' => $userid, 'created_at' => now()));
+            
             return response()->json(array('result' => true, 'message' => 'Successly, you can now login to your account.', 'data' => []));
         }catch(Exception $e) {
             return response()->json(array('result' => false, 'message' => $e->getMessage(), 'data' => []), 500);

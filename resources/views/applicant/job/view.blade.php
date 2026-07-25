@@ -77,7 +77,7 @@
                             <div class="inner">
                                 <div class="row m-n2 button">
                                     <div class="col-xl-auto col-lg-12 col-sm-auto col-12 p-2">
-                                        <a href="bookmarked.html" class="d-block btn"><i class="fa fa-heart-o mr-1"></i> Save Job</a>
+                                        <button class="d-block btn" id="save-job-btn" data-slug="{{ $data["meta"]["slug"] }}"><i class="fa fa-heart-o mr-1"></i> Save Job</button>
                                     </div>
                                     <div class="col-xl-auto col-lg-12 col-sm-auto col-12 p-2">
                                         <a href="job-details.html" class="d-block btn btn-alt">Apply Now</a>
@@ -91,14 +91,12 @@
                             <div class="inner">
                                 <h6 class="title">Job Overview</h6>
                                 <ul class="job-overview list-unstyled">
-                                    <li><strong>Published on:</strong> Nov 6, 2023</li>
-                                    <li><strong>Vacancy:</strong> 02</li>
-                                    <li><strong>Employment Status:</strong> Full-time</li>
-                                    <li><strong>Experience:</strong> 2 to 3 year(s)</li>
-                                    <li><strong>Job Location:</strong> Willshire Glen</li>
-                                    <li><strong>Salary:</strong> $5k - $8k</li>
-                                    <li><strong>Gender:</strong> Any</li>
-                                    <li><strong>Application Deadline:</strong> Dec 15, 2023</li>
+                                    <li><strong>Published on:</strong> {{ date_format(date_create($data["info"]["published_date"]),"M d, Y") }}</li>
+                                    <li><strong>Vacancy:</strong> {{ $data["info"]["vacancy"] }}</li>
+                                    <li><strong>Employment Type:</strong> {{ $data["info"]["employment_type"] }}</li>
+                                    <li><strong>Job Location:</strong> {{ $data["info"]["location"] }}</li>
+                                    <li><strong>Salary:</strong> {{ number_format($data["info"]["min_salary"],2,".",",") }} - {{ number_format($data["info"]["max_salary"],2,".",",") }}</li>
+                                    <li><strong>Application Deadline:</strong> {{ date_format(date_create($data["info"]["application_deadline"]),"M d, Y") }}</li>
                                 </ul>
                             </div>
                         </div>

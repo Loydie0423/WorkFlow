@@ -36,8 +36,8 @@
                                 <ul>
                                     <li><i class="lni lni-dollar mr-1"></i> P{{ number_format($item->min_salary,0,".",",") }}-{{ number_format($item->max_salary,0,".",",") }}</li>
                                     <li><i class="lni lni-map-marker mr-1"></i>{{ $item->location }}</li>
-                                    <li><i class="lni lni-clipboard mr-1"></i>{{ $item->arrangement }}</li>
-                                    <li><i class="lni lni-users mr-1"></i>0 applied</li>
+                                    <li><i class="lni lni-display mr-1"></i>{{ $item->arrangement }}</li>
+                                    <li><i class="lni lni-briefcase mr-1"></i>{{ $item->employment_type }}</li>
                                 </ul>
                                 <div class="row d-flex justify-content-end align-items-end">
                                     <div class="col-12">

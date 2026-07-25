@@ -461,10 +461,10 @@
 
             $(".post-job-btn").on("click", function() {
                 let job = [];
-                let company = [];
+                let company = "";
                 let jobdetail = [];
                 let formdata = new FormData($("#create-job-form")[0]);
-                let requiredFields = ['category', 'title', 'location' ,'arrangement', 'min_salary', 'max_salary', 'description'];
+                let requiredFields = ['category', 'title', 'location' ,'arrangement', 'min_salary', 'max_salary', 'employment_type' ,'slot', 'application_deadline', 'description'];
                 formdata = Object.fromEntries(formdata);
                 job.push(formdata);
 
@@ -477,11 +477,8 @@
                     return;
                 }
 
-                $.map(profilecompanytable.rows().data(), function(item) {
-                    company.push(item);
-                });
-
-                if(company.length == 0) {
+                company = profilecompanytable.row(0).data();
+                if(company == undefined) {
                     Swal.fire("Warning!", "Please select company", "info");
                     return
                 }

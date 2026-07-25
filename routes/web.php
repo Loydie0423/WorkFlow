@@ -55,6 +55,7 @@ Route::group(array('middleware' => array('auth')), function() {
         Route::get('/', array(ApplicantHomeController::class, 'index'))->name('applicant.index');
         Route::get('/job', array(ApplicantJobController::class, 'index'))->name('applicant.job.index');
         Route::get('/job/{uuid}', array(ApplicantJobController::class, 'view'))->name('applicant.job.view');
+        Route::post('/job/save', array(ApplicantJobController::class, 'save'))->name('applicant.job.save');
     });
 
     Route::get('account/profile/getcompany', array(CompanyController::class, 'getcurrentcompany'))->name('getcurrentcompany');

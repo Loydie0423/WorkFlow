@@ -400,58 +400,33 @@
                 
             })
 
-            $(".post-job-btn").on("click", function() {
-                let job = [];
-                let company = [];
-                let formdata = new FormData($("#create-job-form")[0]);
-                let requiredFields = ['category', 'title', 'location' ,'arrangement', 'min_salary', 'max_salary', 'description'];
-                formdata = Object.fromEntries(formdata);
-                job.push(formdata);
 
-                $.map(profilecompanytable.rows().data().toArray(), function(item) {
-                    company.push(item);
-                });
-
-                if(company.length == 0) {
-                    Swal.fire("Warning!", "Please select company", "info");
-                    return
-                }
-
-                $.map(requiredFields, function(item) {
-                    $("input[name="+item+"]").removeClass("is-invalid");
-                    $("select[name="+item+"]").removeClass("is-invalid");
-                    $("textarea[name="+item+"]").removeClass("is-invalid");
-                    $("input[name="+item+"]").closest("div").find(".message").text("");
-                    $("select[name="+item+"]").closest("div").find(".message").text("");
-                    $("textarea[name="+item+"]").closest("div").find(".message").text("");
-                });
-
+            $("#save-job-btn").on("click", function() {
+                let uuid = $(this).data("slug");
+                    
                 $.ajax({
-                    url: "{{ route('employer.job.store') }}",
+                    url: "{{ route('applicant.job.save') }}",
                     method: "POST",
                     dataType: "JSON",
-                    headers: {
-                        'X-CSRF-TOKEN' : $("meta[name=csrf-token]").attr("content")
-                    },
                     data: {
-                        job: job,
-                        company: company
+                        uuid: uuid
+                    },
+                    headers: {
+                        "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content")
                     },
                     success: function(e) {
-                        if(e.result) {
-                            Swal.fire("Success", e.message, "success");
-                            window.location.href = "{{ route('employer.job.index') }}";
-                        } else if(e.status == 422) {
-                            let errors = e.errors;
-                            $.each(errors, function(key, item) {
-                                $("input[name="+key+"]").addClass("is-invalid");
-                                $("textarea[name="+key+"]").addClass("is-invalid");
-                                $("input[name="+key+"]").closest("div").find(".message").text(item[0]);
-                                $("select[name="+key+"]").closest("div").find(".message").text(item[0]);
-                                $("textarea[name="+key+"]").closest("div").find(".message").text(item[0]);
-                            });
-                        }
-                    }, error(e) {
+                        let icon = e.code == 201 ? "success" : "info";
+
+                        Swal.fire({
+                            toast: true,
+                            icon: icon,
+                            title: e.message,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    },
+                    error: function() {
                         Swal.fire({
                             toast: true,
                             icon: 'error',
@@ -462,7 +437,6 @@
                         });
                     }
                 });
-
             });
 
             $("#logout").on("click", function() {
