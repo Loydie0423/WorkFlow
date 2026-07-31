@@ -44,7 +44,7 @@ Route::group(array('middleware' => array('auth')), function() {
         Route::get('manage-job', array(JobController::class, 'index'))->name('employer.job.index');
         Route::get('job-list', array(JobController::class, 'joblist'))->name('employer.job.list');
         Route::get('post-job', array(JobController::class, 'create'))->name('employer.job.create');
-        Route::post('post-job/save', array(JobController::class, 'store'))->name('employer.job.store');
+        Route::post('post-job/store', array(JobController::class, 'store'))->name('employer.job.store');
 
         Route::get('account/profile', array(AccountController::class, 'profile'))->name('employer.profile.index');
         Route::get('getcompanies', array(CompanyController::class, 'getcompanies'))->name('employer.getcompanies');
@@ -55,7 +55,9 @@ Route::group(array('middleware' => array('auth')), function() {
         Route::get('/', array(ApplicantHomeController::class, 'index'))->name('applicant.index');
         Route::get('/job', array(ApplicantJobController::class, 'index'))->name('applicant.job.index');
         Route::get('/job/{uuid}', array(ApplicantJobController::class, 'view'))->name('applicant.job.view');
-        Route::post('/job/save', array(ApplicantJobController::class, 'save'))->name('applicant.job.save');
+        Route::post('/job/store', array(ApplicantJobController::class, 'store'))->name('applicant.job.store');
+        Route::get('/job/saved/view', array(ApplicantJobController::class, 'savejobsindex'))->name('applicant.job.saved.index');
+        Route::post('/job/saved/{uuid}/remove', array(ApplicantJobController::class, 'savedjobsremove'))->name('applicant.job.saved.remove');
     });
 
     Route::get('account/profile/getcompany', array(CompanyController::class, 'getcurrentcompany'))->name('getcurrentcompany');

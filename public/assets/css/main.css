@@ -1191,7 +1191,6 @@ ol {
   transition: 0.5s;
   border-radius: 4px;
 }
-
 .button .btn:hover {
   background-color: #081828;
   color: #fff;
@@ -5128,4 +5127,108 @@ ul.pagination {
   width: 70px;
   height: 70px;
   border-radius: 8px;
+}
+
+.dashbord-sidebar {
+  background-color: rgb(255, 255, 255);
+  padding: 30px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(238, 238, 238);
+  border-image: none;
+  border-radius: 6px;
+}
+
+.dashbord-sidebar ul .heading {
+  font-size: 20px;
+  font-weight: 600;
+  color: rgb(8, 24, 40);
+  margin-bottom: 20px;
+}
+
+.dashbord-sidebar ul li a {
+  color: rgb(8, 24, 40);
+  display: block;
+  font-weight: 500;
+  padding: 10px 15px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(238, 238, 238);
+  border-image: none;
+  border-radius: 5px;
+}
+
+.dashbord-sidebar ul li a i {
+  font-size: 14px;
+  color: rgb(32, 66, 227);
+  display: inline-block;
+  margin-right: 8px;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  line-height: 30px;
+  background: rgba(32, 66, 227, 0.05);
+  border-radius: 3px;
+  transition: 0.4s;
+}
+
+.bookmarked .job-items {
+  padding: 30px;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+}
+
+.bookmarked .job-items {
+  padding: 30px;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+}
+
+.bookmarked .job-items .manage-content .title-img .can-img {
+  float: left;
+  margin-right: 8px;
+}
+
+.bookmarked .job-items .manage-content .can-img img {
+  width: 50px;
+  margin: 5px 15px;
+}
+
+.bookmarked .job-items .manage-content .title-img h3 {
+  font-weight: 600;
+  position: relative;
+  top: 8px;
+}
+
+.bookmarked .job-items .manage-content h3 {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.bookmarked .job-items .manage-content .title-img h3 span {
+  font-size: 13px;
+  font-weight: 400;
+  display: block;
+  margin-top: 5px;
+}
+
+.bookmarked .job-items .manage-content .time {
+  background: #2042e314;
+  color: #2042e3;
+  padding: 5px 14px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+
+.bookmarked .job-items .manage-content .location {
+  font-size: 13px;
+  position: relative;
+  padding-left: 20px;
+}
+
+.bookmarked .job-items .manage-content .button .btn {
+    padding: 8px 12px;
+    font-size: 13px;
 }

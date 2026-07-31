@@ -33,7 +33,7 @@ class JobController extends Controller
         return view('applicant.job.view', array('data' => $data));
     }
 
-    public function save(Request $request)
+    public function store(Request $request)
     {
         try{
             DB::beginTransaction();
@@ -56,4 +56,25 @@ class JobController extends Controller
             return response()->json(array("result" => false, "message" => "Server Error!", "data" => []));
         }
     }
+
+    public function savejobsindex() 
+    {
+        $data = DB::table("saved_jobs AS a")->join("jobs AS b","a.job_id","=","b.id")->join("applicants AS c","a.applicant_id","=","c.id")->join("companies AS d","b.company_id","=","d.id")->select("b.title", "d.name AS company_name", "b.arrangement", "b.location", "b.slug AS uuid")->where("c.user_id",auth()->user()->id)->get();
+        return view("applicant.job.saved-job", array("jobs" => $data));
+    }
+
+    public function savedjobsremove(string $uuid) 
+    {
+        try 
+        {   
+            DB::beginTransaction();
+            $job = DB::table("jobs")->where("slug", $uuid)->first();
+            DB::table("saved_jobs")->where("job_id",$job->id)->delete();
+            DB::commit();
+            return response()->json(array("result" => true, "message" => "Success.", "data" => []));
+        } catch(Exception $e) {
+            DB::rollBack();
+            return response()->json(array("result" => false, "message" => $e->getMessage(), "data" => []));
+        }
+    } 
 }

@@ -41,7 +41,7 @@ class JobController extends Controller
             ));
         }
 
-        return response()->json(array("data" => $data));
+        return response()->json(array("result" => true, "message" => "Load.", "data" => $data));
     }
 
     public function create() 

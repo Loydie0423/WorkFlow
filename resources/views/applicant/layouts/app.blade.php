@@ -57,6 +57,7 @@
                                     <li class="nav-item"><a href="#">Jobs </a>
                                         <ul class="sub-menu">
                                             <li><a href="{{ route('applicant.job.index') }}">Browse Jobs</a></li>
+                                            <li><a href="{{ route('applicant.job.saved.index') }}">Saved Jobs</a></li>
                                         </ul>
                                     </li>
                                     <li class="nav-item"><a href="#">Blog</a>
@@ -405,7 +406,7 @@
                 let uuid = $(this).data("slug");
                     
                 $.ajax({
-                    url: "{{ route('applicant.job.save') }}",
+                    url: "{{ route('applicant.job.store') }}",
                     method: "POST",
                     dataType: "JSON",
                     data: {
@@ -417,6 +418,44 @@
                     success: function(e) {
                         let icon = e.code == 201 ? "success" : "info";
 
+                        Swal.fire({
+                            toast: true,
+                            icon: icon,
+                            title: e.message,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            toast: true,
+                            icon: 'error',
+                            title: 'Server Error!',
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    }
+                });
+            });
+
+            $(".removed-saved-job").on("click", function() {
+                let uuid = $(this).data("uuid");
+                let url = "/applicant/job/saved/:uuid/remove";
+                url = url.replace(":uuid", uuid);
+
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content")
+                    },
+                    data: {
+                        uuid: uuid
+                    },
+                    success: function() {
+                        window.location.reload();
                         Swal.fire({
                             toast: true,
                             icon: icon,

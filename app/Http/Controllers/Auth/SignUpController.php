@@ -14,10 +14,6 @@ class SignUpController extends Controller
     public function store(Request $request) 
     {
         try {
-            if(!$request->ajax()) {
-                abort('403', 'Forbidden');
-            }
-
             $validator = Validator::make($request->all(), array(
                 'first_name' => array('required'),
                 'middle_name' => array('required'),
@@ -29,7 +25,7 @@ class SignUpController extends Controller
             ));
 
             if($validator->fails()) {
-                return response()->json(array('result' => false, 'message' => 'Validation Error', 'data' => $validator->errors()->toArray()));
+                return response()->json(array('result' => false, 'message' => 'Validation Error!', 'data' => $validator->errors()->toArray()));
             }
 
             $userid = DB::table('users')->insertGetId(array(

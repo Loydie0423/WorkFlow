@@ -48,6 +48,6 @@ class CompanyController extends Controller
         }
 
         $data = DB::table('employers AS a')->join('companies AS b','a.company_id','=','b.id')->where('a.user_id', auth()->user()->id)->get();
-        return response()->json(array("data" => $data));
+        return response()->json(array("result" => true, "message" => "Load.", "data" => $data));
     }
 }

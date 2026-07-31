@@ -14,10 +14,6 @@ class LoginController extends Controller
     public function login(Request $request) 
     {
         try {
-            if(!$request->ajax()) {
-                abort('403', 'Forbidden');
-            }
-
             $validator = Validator::make($request->only('email','password'), array(
                 'email' => array('required'),
                 'password' => array('required')
