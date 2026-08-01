@@ -80,7 +80,7 @@
                                         <button class="d-block btn" id="save-job-btn" data-slug="{{ $data["meta"]["slug"] }}"><i class="fa fa-heart-o mr-1"></i> Save Job</button>
                                     </div>
                                     <div class="col-xl-auto col-lg-12 col-sm-auto col-12 p-2">
-                                        <a href="job-details.html" class="d-block btn btn-alt">Apply Now</a>
+                                        <button class="d-block btn btn-alt" id="apply-job-btn" data-slug="{{ $data["meta"]["slug"] }}">Apply Now</button>
                                     </div>
                                 </div>
                             </div>
@@ -114,6 +114,24 @@
                 </div>
                 <!-- Job Sidebar Wrap End -->
 
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="validate-application-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Info</h5>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="validate-application-title-message">.</p>
+                <ul id="validate-application-list"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
             </div>
         </div>
     </div>

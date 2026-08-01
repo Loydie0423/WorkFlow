@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Employer\HomeController as EmployerHomeController;
+use App\Http\Controllers\Applicant\AccountController AS ApplicantAccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +39,6 @@ Route::group(array('middleware' => array('guest')), function() {
 
 Route::group(array('middleware' => array('auth')), function() {
 
-
     Route::group(array('prefix' => 'employer'), function() {
         Route::get('/', array(EmployerHomeController::class, 'index'))->name('employer.index');
         Route::get('manage-job', array(JobController::class, 'index'))->name('employer.job.index');
@@ -46,9 +46,9 @@ Route::group(array('middleware' => array('auth')), function() {
         Route::get('post-job', array(JobController::class, 'create'))->name('employer.job.create');
         Route::post('post-job/store', array(JobController::class, 'store'))->name('employer.job.store');
 
-        Route::get('account/profile', array(AccountController::class, 'profile'))->name('employer.profile.index');
         Route::get('getcompanies', array(CompanyController::class, 'getcompanies'))->name('employer.getcompanies');
         Route::post('selectcompany', array(CompanyController::class, 'selectcompany'))->name('employer.selectcompany');
+        Route::get('account/profile', array(AccountController::class, 'profile'))->name('employer.profile.index');
     });
 
     Route::group(array('prefix' => 'applicant'), function() {
@@ -58,6 +58,9 @@ Route::group(array('middleware' => array('auth')), function() {
         Route::post('/job/store', array(ApplicantJobController::class, 'store'))->name('applicant.job.store');
         Route::get('/job/saved/view', array(ApplicantJobController::class, 'savejobsindex'))->name('applicant.job.saved.index');
         Route::post('/job/saved/{uuid}/remove', array(ApplicantJobController::class, 'savedjobsremove'))->name('applicant.job.saved.remove');
+        Route::post('job/application/validate', array(ApplicantJobController::class, 'validateapplication'))->name('applicant.job.application.validate');
+
+        Route::get('account/profile', array(ApplicantAccountController::class, 'profile'))->name('applicant.profile.index');
     });
 
     Route::get('account/profile/getcompany', array(CompanyController::class, 'getcurrentcompany'))->name('getcurrentcompany');
@@ -67,6 +70,8 @@ Route::group(array('middleware' => array('auth')), function() {
 Route::get('logout2', function() {
     Auth::logout();
 });
+
+Route::get('test', array(ApplicantJobController::class, 'validateapplication'));
 
 
 

@@ -478,6 +478,58 @@
                 });
             });
 
+            $("#apply-job-btn").on("click", function() {
+                let uuid = $(this).data("slug");
+
+                Swal.fire({
+                    title: "Confirmation",
+                    text: "Are you sure?",
+                    icon: "warning",
+                    showConfirmButton: true,
+                    confirmButtonText: "Yes, im sure",
+                    confirmButtonColor: "#007bff",
+                    showCancelButton: true,
+                    reverseButon: true
+                }).then((result) => {
+                    if(result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('applicant.job.application.validate') }}",
+                            method: "POST",
+                            dataType: "JSON",
+                            headers: {
+                                "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content")
+                            },
+                            data: {
+                                uuid: uuid
+                            },
+                            success: function(e) {
+                                if(e.code == 200) {
+                                    return;
+                                } 
+
+                                $("#validate-application-modal").modal("show");
+                                $("#validate-application-title-message").text(e.message);
+
+                                $.each(e.data, function(key, item) {
+                                    let list = "<li class='validate-application-list-item'>"+item+"</li>";
+                                    $("#validate-application-list").append(list);
+                                });
+                            },
+                            error : function() {
+                                Swal.fire({
+                                    toast: true,
+                                    icon: 'error',
+                                    title: 'Server Error!',
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
             $("#logout").on("click", function() {
                 $.ajax({
                     url: "{{ route('logout') }}",
