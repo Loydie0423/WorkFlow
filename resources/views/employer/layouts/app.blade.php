@@ -461,27 +461,15 @@
 
             $(".post-job-btn").on("click", function() {
                 let job = [];
-                let company = "";
-                let jobdetail = [];
+                let jobdet = [];
                 let formdata = new FormData($("#create-job-form")[0]);
                 let requiredFields = ['category', 'title', 'location' ,'arrangement', 'min_salary', 'max_salary', 'employment_type' ,'slot', 'application_deadline', 'description'];
                 formdata = Object.fromEntries(formdata);
                 job.push(formdata);
 
                 $.map(jobdetailstable.rows().data(), function(item) {
-                    jobdetail.push(item);
+                    jobdet.push(item);
                 });
-
-                if(jobdetail.length == 0) {
-                    Swal.fire("Warning!", "Add atleast one job detail", "info");
-                    return;
-                }
-
-                company = profilecompanytable.row(0).data();
-                if(company == undefined) {
-                    Swal.fire("Warning!", "Please select company", "info");
-                    return
-                }
 
                 $.map(requiredFields, function(item) {
                     $("input[name="+item+"]").removeClass("is-invalid");
@@ -492,8 +480,11 @@
                     $("textarea[name="+item+"]").closest("div").find(".message").text("");
                 });
 
+                $("#validate-jobpost-title-message").empty();
+                $("#validate-jobpost-list").empty();
+
                 $.ajax({
-                    url: "{{ route('employer.job.store') }}",
+                    url: "{{ route('employer.job.post.validate') }}",
                     method: "POST",
                     dataType: "JSON",
                     headers: {
@@ -501,24 +492,31 @@
                     },
                     data: {
                         job: job,
-                        company: company,
-                        job_details: jobdetail
+                        jobdet: jobdet
                     },
                     success: function(e) {
                         if(e.result) {
                             Swal.fire("Success", e.message, "success");
                             window.location.href = "{{ route('employer.job.index') }}";
-                        } else if(e.status == 422) {
-                            let errors = e.errors;
-                            $.each(errors, function(key, item) {
+                        } else {
+                            $("#validate-jobpost-modal").modal("show");
+                            $("#validate-jobpost-title-message").text(e.message);
+
+                            $.each(e.data, function(key, item) {
+                                let list = "<li class='validate-jobpost-list-item'>"+item+"</li>";
+                                $("#validate-jobpost-list").append(list);
+                            });
+
+                            $.each(e.errors, function(key, item) {
                                 $("input[name="+key+"]").addClass("is-invalid");
                                 $("textarea[name="+key+"]").addClass("is-invalid");
-                                $("input[name="+key+"]").closest("div").find(".message").text(item[0]);
-                                $("select[name="+key+"]").closest("div").find(".message").text(item[0]);
-                                $("textarea[name="+key+"]").closest("div").find(".message").text(item[0]);
+                                $("input[name="+key+"]").closest("div").find(".message").text(item);
+                                $("select[name="+key+"]").closest("div").find(".message").text(item);
+                                $("textarea[name="+key+"]").closest("div").find(".message").text(item);
                             });
                         }
-                    }, error(e) {
+                    }, 
+                    error: function(e) {
                         Swal.fire({
                             toast: true,
                             icon: 'error',

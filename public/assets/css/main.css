@@ -3742,6 +3742,12 @@ ol {
     padding-bottom: 15px !important;
   }
 
+  .find-job .single-job .job-content p{
+    margin-top: 10px;
+    min-height: 50px !important;
+    overflow: ellipsis;
+  }
+
   .find-job .single-job .job-button {
     position: relative !important;
     left: 0 !important;
@@ -5239,7 +5245,7 @@ ul.pagination {
 }
 
 #validate-application-title-message {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -5248,3 +5254,20 @@ ul.pagination {
   font-size: 13px;
   margin-left: 20px;
 }
+
+#validate-jobpost-list ul {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+#validate-jobpost-title-message {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.validate-jobpost-list-item {
+  list-style-type: circle;
+  font-size: 13px;
+  margin-left: 20px;
+}
+

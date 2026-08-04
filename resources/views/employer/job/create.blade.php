@@ -30,7 +30,7 @@
                         <div class="row my-1">
                             <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    <label>Category*</label>
+                                    <label>Category<span class="text-danger">*</span></label>
                                     <select name="category" class="form form-control">
                                        @foreach ($categories as $key => $item)
                                            <option value="{{ $key }}">{{ $item }}</option>
@@ -41,7 +41,7 @@
                             </div>
                             <div class="col-lg-9 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    <label>Job title*</label>
+                                    <label>Job title<span class="text-danger">*</span></label>
                                     <input class="form-control" type="text" name="title" placeholder="Enter Job Title">
                                     <span class="message text-sm text-danger"></span>
                                 </div>
@@ -50,7 +50,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label>Location*</label>
+                                    <label>Location<span class="text-danger">*</span></label>
                                     <input class="form-control" type="text" name="location" placeholder="Enter Location">
                                     <span class="message text-sm text-danger"></span>
                                 </div>
@@ -59,7 +59,7 @@
                         <div class="row my-1">
                             <div class="col-8">
                                 <div class="form-group">
-                                    <label>Arrangement*</label>
+                                    <label>Arrangement<span class="text-danger">*</span></label>
                                     <select name="arrangement" class="form form-control">
                                        <option value="Onsite">Onsite</option>
                                        <option value="Work From Home">Work From Home</option>
@@ -70,11 +70,11 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label>Salary</label>
+                                    <label>Salary<span class="text-danger">*</span></label>
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <input type="number" name="min_salary" placeholder="MIN" class="form form-control">
+                                        <input type="number" name="min_salary" placeholder="min" class="form form-control">
                                         <span class="form-weight-bold mx-2">-</span>
-                                        <input type="number" name="max_salary" placeholder="MAX" class="form form-control">
+                                        <input type="number" name="max_salary" placeholder="max" class="form form-control">
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +82,7 @@
                             <div class="row my-1">
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label>Employment Type*</label>
+                                        <label>Employment Type<span class="text-danger">*</span></label>
                                         <select name="employment_type" class="form-control">
                                             <option value="Full-time">Full-time</option>
                                             <option value="Part-time">Part-time</option>
@@ -92,14 +92,14 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label>Slot*</label>
+                                        <label>Slot<span class="text-danger">*</span></label>
                                         <input type="number" name="slot" class="form-control" placeholder="Enter Slot">
                                         <span class="message text-sm text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label>Application Deadline*</label>
+                                        <label>Application Deadline<span class="text-danger">*</span></label>
                                         <input type="date" name="application_deadline" class="form-control">
                                         <span class="message text-sm text-danger"></span>
                                     </div>
@@ -109,7 +109,7 @@
                             <div class="row my-1">
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label>Job Description*</label>
+                                        <label>Job Description<span class="text-danger">*</span></label>
                                         <textarea name="description" class="form-control" rows="5" placeholder="Enter Description"></textarea>
                                         <span class="message text-sm text-danger"></span>
                                     </div>
@@ -134,27 +134,6 @@
                             </table>
                         </div>
                     </div>
-                    <hr>
-                    <h3 class="title my-1">Company Information</h3>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-success btn-sm mr-1" data-toggle="modal" data-target="#search-company-modal"><i class="fas fa-search"></i></button>
-                                <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i></button>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <table class="table table-bordered" id="profile-company-table">
-                                <thead>
-                                    <th>Logo</th>
-                                    <th>Name</th>
-                                    <th>Address</th>
-                                    <th>URL</th>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
                     <div class="row my-4">
                         <div class="col d-flex justify-content-start button">
                             <a class="btn mr-1" href="{{ route('employer.job.index') }}">Cancel</a>
@@ -168,38 +147,12 @@
 </section>
 
     {{-- Modals --}}
-    <div class="modal fade" id="search-company-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Select Company</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered" id="selection-company-table">
-                    <thead>
-                        <th>Logo</th>
-                        <th>Company Name</th>
-                        <th>URL</th>
-                        <th>Address</th>
-                        <th>Action</th>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-            </div>
-        </div>
-    </div>
-
 
     <div class="modal fade" id="job-detail-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Job Detail</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Job Detail</h5>
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -227,8 +180,25 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="add-job-detail-button">Add</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-sm btn-primary" id="add-job-detail-button">Add</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="validate-jobpost-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Info</h5>
+            </div>
+            <div class="modal-body">
+                <p id="validate-jobpost-title-message"></p>
+                <ul id="validate-jobpost-list"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
             </div>
             </div>
         </div>

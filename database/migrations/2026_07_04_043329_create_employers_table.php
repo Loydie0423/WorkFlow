@@ -16,7 +16,7 @@ class CreateEmployersTable extends Migration
         Schema::create('employers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('company_id')->constrained('companies')->nullable();
+            $table->foreignId('company_id')->nullable()->constrained('companies');
             $table->string('position')->nullable();
             $table->timestamps();
         });

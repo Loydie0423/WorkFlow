@@ -33,7 +33,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="d-flex justify-content-end">
-                                        <a class="btn btn-primary btn-sm" href="{{ route('employer.job.create') }}"><i class="fa fa-sm fa-plus"></i> Add New</a>
+                                        <a class="btn btn-primary btn-sm" href="{{ route('employer.job.create') }}"><i class="fa fa-sm fa-plus"></i> Post</a>
                                     </div>
                                 </div>
                                 <div class="col">

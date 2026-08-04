@@ -489,8 +489,11 @@
                     confirmButtonText: "Yes, im sure",
                     confirmButtonColor: "#007bff",
                     showCancelButton: true,
-                    reverseButon: true
+                    reverseButtons: true
                 }).then((result) => {
+                    $("#validate-application-title-message").empty();
+                    $("#validate-application-list").empty();
+
                     if(result.isConfirmed) {
                         $.ajax({
                             url: "{{ route('applicant.job.application.validate') }}",
