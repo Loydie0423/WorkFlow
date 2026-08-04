@@ -23,12 +23,12 @@ class JobController extends Controller
         return view("employer.job.index");
     }
 
-    public function joblist(Request $request) 
+    public function joblist() 
     {
         $data = array();
-        $query = DB::table("jobs AS a")->join("companies AS b","a.company_id","=","b.id")->join("employers AS c","a.employer_id","=","c.id")->join("users AS d","c.user_id","=","d.id")->join("job_categories AS e","a.job_category_id","=","e.id")->select("a.title","b.name","a.arrangement","a.location",DB::raw("FORMAT(a.min_salary,2) AS min_salary"),DB::raw("FORMAT(a.max_salary,2) AS max_salary"), "e.description AS category")->where("d.id", auth()->user()->id)->get();
+        $job = DB::table("jobs AS a")->join("companies AS b","a.company_id","=","b.id")->join("employers AS c","a.employer_id","=","c.id")->join("users AS d","c.user_id","=","d.id")->join("job_categories AS e","a.job_category_id","=","e.id")->select("a.title","b.name","a.arrangement","a.location",DB::raw("FORMAT(a.min_salary,2) AS min_salary"),DB::raw("FORMAT(a.max_salary,2) AS max_salary"), "e.description AS category")->where("d.id", auth()->user()->id)->get();
 
-        foreach($query AS $item) {
+        foreach($job AS $item) {
             array_push($data, array(
                 "title" => $item->title,
                 "category" => $item->category,

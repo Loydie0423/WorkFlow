@@ -32,7 +32,7 @@ class CompanyController extends Controller
                 ->update(array('company_id' => $company->id, 'updated_at' => now())
             );
 
-             $data = DB::table('employers AS a')->join('companies AS b','a.company_id','=','b.id')->where('a.user_id', auth()->user()->id)->get();
+            $data = DB::table('employers AS a')->join('companies AS b','a.company_id','=','b.id')->where('a.user_id', auth()->user()->id)->get();
             DB::commit();
             return response()->json(array("result" => true, "message" => "Saved.", "data" => $data));
         } catch(Exception $e) {

@@ -132,7 +132,7 @@
 
     @yield('content')
 
-        <!-- Start Footer Area -->
+    <!-- Start Footer Area -->
     <footer class="footer">
         <div class="footer-top">
             <div class="container">
