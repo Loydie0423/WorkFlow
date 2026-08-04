@@ -27,7 +27,7 @@ class JobApplicationController extends Controller
                 }
             }
 
-            if(sizeof($arr) == 0) {
+            if(empty($arr)) {
                 return response()->json(array("result" => true, "message" => "Success!", "data" => [], "code" => 200));
             }
 

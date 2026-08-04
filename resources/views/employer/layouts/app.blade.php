@@ -344,6 +344,18 @@
                 ]
             });
 
+            let jobdetailstable = $("#job-details-table").DataTable({
+                data: [],
+                columns: [
+                    {data: "type"},
+                    {data: "details"}
+                ],
+                info: false,
+                paging: false,
+                ordering: false,
+                searching: false
+            });
+
             $("#search-company-modal").on("shown.bs.modal", function() {
 
                 if(profilecompanytable.rows().count() > 0) {
@@ -432,6 +444,7 @@
                 let bool = false;
                 let type = $("select[name=job-detail-type]");
                 let details = $("textarea[name=job-detail-details]");
+                let invalid = ["",null,undefined];
 
                 let attr = [
                     {field: $("select[name=job-detail-type]"), message: "Field is required"},
@@ -441,8 +454,8 @@
                 $.each(attr, function(key, item) {
                     item.field.removeClass("is-invalid");
                     item.field.closest(".form-group").find(".error-message").text("");
-
-                    if(item.field.val() == "") {
+                    
+                    if(invalid.includes(item.field.val())) {
                         bool = true;
                         item.field.addClass("is-invalid");
                         item.field.closest(".form-group").find(".error-message").text(item.message);
@@ -495,26 +508,28 @@
                         jobdet: jobdet
                     },
                     success: function(e) {
+
                         if(e.result) {
                             Swal.fire("Success", e.message, "success");
                             window.location.href = "{{ route('employer.job.index') }}";
-                        } else {
-                            $("#validate-jobpost-modal").modal("show");
-                            $("#validate-jobpost-title-message").text(e.message);
+                            return;
+                        } 
 
-                            $.each(e.data, function(key, item) {
-                                let list = "<li class='validate-jobpost-list-item'>"+item+"</li>";
-                                $("#validate-jobpost-list").append(list);
-                            });
+                        $("#validate-jobpost-modal").modal("show");
+                        $("#validate-jobpost-title-message").text(e.message);
+                        $.each(e.data.reqlist, function(key, item) {
+                            let list = "<li class='validate-jobpost-list-item'>"+item+"</li>";
+                            $("#validate-jobpost-list").append(list);
+                        });
 
-                            $.each(e.errors, function(key, item) {
-                                $("input[name="+key+"]").addClass("is-invalid");
-                                $("textarea[name="+key+"]").addClass("is-invalid");
-                                $("input[name="+key+"]").closest("div").find(".message").text(item);
-                                $("select[name="+key+"]").closest("div").find(".message").text(item);
-                                $("textarea[name="+key+"]").closest("div").find(".message").text(item);
-                            });
-                        }
+                        $.each(e.errors, function(key, item) {
+                            $("input[name="+key+"]").addClass("is-invalid");
+                            $("textarea[name="+key+"]").addClass("is-invalid");
+                            $("input[name="+key+"]").closest("div").find(".message").text(item);
+                            $("select[name="+key+"]").closest("div").find(".message").text(item);
+                            $("textarea[name="+key+"]").closest("div").find(".message").text(item);
+                        });
+                        
                     }, 
                     error: function(e) {
                         Swal.fire({
@@ -527,19 +542,6 @@
                         });
                     }
                 });
-
-            });
-
-            let jobdetailstable = $("#job-details-table").DataTable({
-                data: [],
-                columns: [
-                    {data: "type"},
-                    {data: "details"}
-                ],
-                info: false,
-                paging: false,
-                ordering: false,
-                searching: false
 
             });
 

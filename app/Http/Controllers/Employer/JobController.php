@@ -53,7 +53,7 @@ class JobController extends Controller
     public function validatejobpost(Request $request) 
     {
         try {
-            $arrx = array();
+            $arrx = array("reqlist" => []);
             $errors = array();
             $payload = array("job" => [], "jobdet" => []);
             
@@ -80,28 +80,28 @@ class JobController extends Controller
             ));
 
             if($validator->fails()) {
-                array_push($arrx, "Job Information form is incomplete or has an invalid value.");
                 foreach($validator->errors()->toArray() AS $key => $item) {
                    $errors[$key] = $item[0];
                 }   
+                array_push($arrx["reqlist"], "Job Information form is incomplete or has an invalid value.");
             }
 
             if(empty($payload["jobdet"])) {
-                array_push($arrx, "No Job Details Found.");
+                array_push($arrx["reqlist"], "No Job Details Found.");
             } 
 
             if(empty($det->company_id)) {
-                array_push($arrx, "No Company Details Found.");
+                array_push($arrx["reqlist"], "No Company Details Found.");
             }
 
-            if(empty($arrx)) {
+            if(empty($arrx["reqlist"])) {
                 $this->postjob($payload["job"], $payload["jobdet"]);
                 return response()->json(array("result" => true, "message" => "Saved.", "data" => [], "status" => 201));
             }
 
             return response()->json(array("result" => false, "message" => "Job Post doesn't meet the following requirements:", "data" => $arrx, "errors" => $errors, "status" => 422));
         } catch(Exception $e) {
-            return response()->json(array("result" => false, "message" => $e->getMessage(), "data" => [], "line" => $e->getLine(), "file" => $e->getFile()));
+            return response()->json(array("result" => false, "message" => $e->getMessage(), "data" => []));
         }
     }
 
@@ -109,7 +109,6 @@ class JobController extends Controller
     {
         try {
             DB::beginTransaction();
-
             $employer = DB::table("employers")->where("user_id", auth()->user()->id)->first();
             $jobid = DB::table("jobs")->insertGetId(array(
                 "company_id" => $employer->company_id,
