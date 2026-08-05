@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Employer;
 
 use Exception;
-use App\Helpers\Slug;
+
+use App\Services\JobService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,11 +12,11 @@ use Illuminate\Support\Facades\Validator;
 
 class JobController extends Controller
 {
-    private Slug $slug;
+    private JobService $jobservice;
 
     public function __construct() 
     {
-        $this->slug = new Slug();
+        $this->jobservice = new JobService();
     }
 
     public function index() 
@@ -95,49 +96,11 @@ class JobController extends Controller
             }
 
             if(empty($arrx["reqlist"])) {
-                $this->postjob($payload["job"], $payload["jobdet"]);
-                return response()->json(array("result" => true, "message" => "Saved.", "data" => [], "status" => 201));
+                return $this->jobservice->savejob($payload["job"], $payload["jobdet"]);
             }
 
             return response()->json(array("result" => false, "message" => "Job Post doesn't meet the following requirements:", "data" => $arrx, "errors" => $errors, "status" => 422));
         } catch(Exception $e) {
-            return response()->json(array("result" => false, "message" => $e->getMessage(), "data" => []));
-        }
-    }
-
-    public function postjob($job, $jobdet) 
-    {
-        try {
-            DB::beginTransaction();
-            $employer = DB::table("employers")->where("user_id", auth()->user()->id)->first();
-            $jobid = DB::table("jobs")->insertGetId(array(
-                "company_id" => $employer->company_id,
-                "employer_id" => $employer->id,
-                "job_category_id" => $job["category"],
-                "title" => $job["title"],
-                "location" => $job["location"],
-                "arrangement" => $job["arrangement"],
-                "description" => $job["description"],
-                "min_salary" => $job["min_salary"],
-                "max_salary" => $job["max_salary"],
-                "slot" => $job["slot"],
-                "application_deadline" => $job["application_deadline"],
-                "slug" => $this->slug->generate(),
-                "created_at" => now()
-            ));
-
-            foreach($jobdet AS $item) {
-                DB::table("job_details")->insert([
-                    "job_id" => $jobid,
-                    "type" => $item["type"],
-                    "details" => $item["details"],
-                    "created_at" => now()
-                ]);
-            }
-
-            DB::commit();
-        } catch(Exception $e) {
-            DB::rollBack();
             return response()->json(array("result" => false, "message" => $e->getMessage(), "data" => []));
         }
     }
