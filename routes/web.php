@@ -45,7 +45,7 @@ Route::group(array('middleware' => array('auth')), function() {
         Route::get('manage-job', array(JobController::class, 'index'))->name('employer.job.index');
         Route::get('job-list', array(JobController::class, 'joblist'))->name('employer.job.list');
         Route::get('post-job', array(JobController::class, 'create'))->name('employer.job.create');
-        Route::post('post-job/validate', array(JobController::class, 'validatejobpost'))->name('employer.job.post.validate');
+        Route::post('post-job/', array(JobController::class, 'savejob'))->name('employer.job.post');
 
         Route::get('getcompanies', array(CompanyController::class, 'getcompanies'))->name('employer.getcompanies');
         Route::post('selectcompany', array(CompanyController::class, 'selectcompany'))->name('employer.selectcompany');
@@ -56,7 +56,7 @@ Route::group(array('middleware' => array('auth')), function() {
         Route::get('/', array(ApplicantHomeController::class, 'index'))->name('applicant.index');
         Route::get('job', array(ApplicantJobController::class, 'index'))->name('applicant.job.index');
         Route::get('job/{uuid}', array(ApplicantJobController::class, 'view'))->name('applicant.job.view');
-        Route::post('job/store', array(ApplicantJobController::class, 'store'))->name('applicant.job.store');
+        Route::post('job/store', array(ApplicantJobController::class, 'savejob'))->name('applicant.job.store');
         Route::get('job/saved/view', array(ApplicantJobController::class, 'savejobsindex'))->name('applicant.job.saved.index');
         Route::post('job/saved/{uuid}/remove', array(ApplicantJobController::class, 'savedjobsremove'))->name('applicant.job.saved.remove');
         Route::post('job/application/validate', array(ApplicantJobApplicationController::class, 'validateapplication'))->name('applicant.job.application.validate');

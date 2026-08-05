@@ -497,7 +497,7 @@
                 $("#validate-jobpost-list").empty();
 
                 $.ajax({
-                    url: "{{ route('employer.job.post.validate') }}",
+                    url: "{{ route('employer.job.post') }}",
                     method: "POST",
                     dataType: "JSON",
                     headers: {

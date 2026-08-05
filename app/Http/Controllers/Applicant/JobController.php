@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Applicant;
 
+
 use Exception;
+use App\Contracts\JobContracts;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
-class JobController extends Controller
+class JobController extends Controller implements JobContracts
 {
     public function index(): View
     {
@@ -35,7 +37,7 @@ class JobController extends Controller
         return view('applicant.job.view', array('data' => $data));
     }
 
-    public function store(Request $request): JsonResponse
+    public function savejob(Request $request): JsonResponse
     {
         try{
             DB::beginTransaction();

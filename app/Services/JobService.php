@@ -11,7 +11,7 @@ class JobService
 {
     use Slug;
 
-    public function store(array $job, array $jobdet): JsonResponse
+    public function save(array $data): JsonResponse
     {
          try {
             DB::beginTransaction();
@@ -19,27 +19,22 @@ class JobService
             $jobid = DB::table("jobs")->insertGetId(array(
                 "company_id" => $employer->company_id,
                 "employer_id" => $employer->id,
-                "job_category_id" => $job["category"],
-                "title" => $job["title"],
-                "location" => $job["location"],
-                "arrangement" => $job["arrangement"],
-                "description" => $job["description"],
-                "employment_type" => $job["employment_type"],
-                "min_salary" => $job["min_salary"],
-                "max_salary" => $job["max_salary"],
-                "slot" => $job["slot"],
-                "application_deadline" => $job["application_deadline"],
+                "job_category_id" => $data["job"]["category"],
+                "title" => $data["job"]["title"],
+                "location" => $data["job"]["location"],
+                "arrangement" => $data["job"]["arrangement"],
+                "description" => $data["job"]["description"],
+                "employment_type" => $data["job"]["employment_type"],
+                "min_salary" => $data["job"]["min_salary"],
+                "max_salary" => $data["job"]["max_salary"],
+                "slot" => $data["job"]["slot"],
+                "application_deadline" => $data["job"]["application_deadline"],
                 "slug" => $this->generate(),
                 "created_at" => now()
             ));
 
-            foreach($jobdet AS $item) {
-                DB::table("job_details")->insert([
-                    "job_id" => $jobid,
-                    "type" => $item["type"],
-                    "details" => $item["details"],
-                    "created_at" => now()
-                ]);
+            foreach($data["job_det"] AS $item) {
+                DB::table("job_details")->insert(["job_id" => $jobid, "type" => $item["type"], "details" => $item["details"], "created_at" => now()]);
             }
 
             DB::commit();

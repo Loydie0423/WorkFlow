@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Employer;
 
 
 use Exception;
+use App\Contracts\EmployerJobContracts;
 use App\Contracts\JobContracts;
 use Illuminate\Http\JsonResponse;
 use App\Services\JobService;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
-class JobController extends Controller implements JobContracts
+class JobController extends Controller implements JobContracts, EmployerJobContracts
 {
     private JobService $jobservice;
 
@@ -54,23 +55,14 @@ class JobController extends Controller implements JobContracts
         return view("employer.job.create", array("categories" => $categories));
     }
 
-    public function validatejobpost(Request $request): JsonResponse
+    public function validatejobpost(array $data): array
     {
-        try {
+        try 
+        {
             $arrx = array("reqlist" => []);
             $errors = array();
-            $payload = array("job" => [], "jobdet" => []);
-            
-            foreach($request->job[0] AS $key => $item) {
-                $payload["job"][$key] = $item;
-            }
-
-            foreach(isset($request->jobdet) ? $request->jobdet : [] AS $key => $item) {
-                $payload["jobdet"][$key] = $item;
-            }
-
             $det = DB::table("employers")->where("user_id", auth()->user()->id)->first();
-            $validator = Validator::make($payload["job"], array(
+            $validator = Validator::make($data["job"], array(
                 "category" => array("required","exists:job_categories,id"),
                 "title" => array("required","max:255"),
                 "location" => array("required","max:255"),
@@ -90,7 +82,7 @@ class JobController extends Controller implements JobContracts
                 array_push($arrx["reqlist"], "Job Information form is incomplete or has an invalid value.");
             }
 
-            if(empty($payload["jobdet"])) {
+            if(empty($data["jobdet"])) {
                 array_push($arrx["reqlist"], "No Job Details Found.");
             } 
 
@@ -98,21 +90,32 @@ class JobController extends Controller implements JobContracts
                 array_push($arrx["reqlist"], "No Company Details Found.");
             }
 
-            if(empty($arrx["reqlist"])) {
-                return $this->savejob($payload["job"], $payload["jobdet"]);
-            }
-
-            return response()->json(array("result" => false, "message" => "Job Post doesn't meet the following requirements:", "data" => $arrx, "errors" => $errors, "status" => 422));
+            return array("data" => $data, "reqlist" => $arrx["reqlist"], "errors" => $errors);
         } catch(Exception $e) {
-            return response()->json(array("result" => false, "message" => $e->getMessage(), "data" => []));
+            return array("result" => false, "message" => $e->getMessage(), "data" => []);
         }
     }
 
-    public function savejob(array $job, array $jobdet): JsonResponse
+    public function savejob(Request $request): JsonResponse
     {
-        try 
-        {
-            return $this->jobservice->store($job, $jobdet);
+        try {
+            $payload = array("job" => [], "jobdet" => []);
+            
+            foreach($request->job[0] AS $key => $item) {
+                $payload["job"][$key] = $item;
+            }
+
+            foreach(isset($request->jobdet) ? $request->jobdet : [] AS $key => $item) {
+                $payload["jobdet"][$key] = $item;
+            }
+
+            $result = $this->validatejobpost($payload);
+            if(empty($result["reqlist"])) {
+                $data = array("job" => $result["data"]["job"], "job_det" => $result["data"]["jobdet"]);
+                return $this->jobservice->save($data);
+            }
+
+            return response()->json(array("result" => false, "message" => "Job Post doesn't meet the following requirements:", "data" => $result["reqlist"], "errors" => $result["errors"], "status" => 422));
         } catch(Exception $e) {
             return response()->json(array("result" => false, "message" => $e->getMessage(), "data" => []));
         }
