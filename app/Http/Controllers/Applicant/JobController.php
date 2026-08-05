@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
-class JobController extends Controller implements JobContracts
+class JobController extends Controller
 {
     public function index(): View
     {

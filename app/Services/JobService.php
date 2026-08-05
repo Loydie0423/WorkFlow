@@ -33,7 +33,7 @@ class JobService
                 "created_at" => now()
             ));
 
-            foreach($data["job_det"] AS $item) {
+            foreach($data["jobdet"] AS $item) {
                 DB::table("job_details")->insert(["job_id" => $jobid, "type" => $item["type"], "details" => $item["details"], "created_at" => now()]);
             }
 

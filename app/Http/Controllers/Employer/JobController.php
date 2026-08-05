@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Employer;
 
 
 use Exception;
-use App\Contracts\EmployerJobContracts;
-use App\Contracts\JobContracts;
 use Illuminate\Http\JsonResponse;
 use App\Services\JobService;
 use App\Http\Controllers\Controller;
@@ -14,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
-class JobController extends Controller implements JobContracts, EmployerJobContracts
+class JobController extends Controller
 {
     private JobService $jobservice;
 
@@ -55,13 +53,12 @@ class JobController extends Controller implements JobContracts, EmployerJobContr
         return view("employer.job.create", array("categories" => $categories));
     }
 
-    public function validatejobpost(array $data): array
+    public function validatepostjob(array $data): array
     {
         try 
         {
-            $arrx = array("reqlist" => []);
             $errors = array();
-            $det = DB::table("employers")->where("user_id", auth()->user()->id)->first();
+            $arrx = array("reqlist" => []);
             $validator = Validator::make($data["job"], array(
                 "category" => array("required","exists:job_categories,id"),
                 "title" => array("required","max:255"),
@@ -96,7 +93,7 @@ class JobController extends Controller implements JobContracts, EmployerJobContr
         }
     }
 
-    public function savejob(Request $request): JsonResponse
+    public function postjob(Request $request): JsonResponse
     {
         try {
             $payload = array("job" => [], "jobdet" => []);
@@ -109,9 +106,9 @@ class JobController extends Controller implements JobContracts, EmployerJobContr
                 $payload["jobdet"][$key] = $item;
             }
 
-            $result = $this->validatejobpost($payload);
+            $result = $this->validatepostjob($payload);
             if(empty($result["reqlist"])) {
-                $data = array("job" => $result["data"]["job"], "job_det" => $result["data"]["jobdet"]);
+                $data = array("job" => $result["data"]["job"], "jobdet" => $result["data"]["jobdet"]);
                 return $this->jobservice->save($data);
             }
 

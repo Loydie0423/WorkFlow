@@ -45,7 +45,7 @@ Route::group(array('middleware' => array('auth')), function() {
         Route::get('manage-job', array(JobController::class, 'index'))->name('employer.job.index');
         Route::get('job-list', array(JobController::class, 'joblist'))->name('employer.job.list');
         Route::get('post-job', array(JobController::class, 'create'))->name('employer.job.create');
-        Route::post('post-job/', array(JobController::class, 'savejob'))->name('employer.job.post');
+        Route::post('post-job', array(JobController::class, 'postjob'))->name('employer.job.post');
 
         Route::get('getcompanies', array(CompanyController::class, 'getcompanies'))->name('employer.getcompanies');
         Route::post('selectcompany', array(CompanyController::class, 'selectcompany'))->name('employer.selectcompany');
