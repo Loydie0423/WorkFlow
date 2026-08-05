@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Employer;
 
-use Exception;
 
+use Exception;
+use App\Contracts\JobContracts;
+use Illuminate\Http\JsonResponse;
 use App\Services\JobService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class JobController extends Controller
+class JobController extends Controller implements JobContracts
 {
     private JobService $jobservice;
 
@@ -96,10 +98,20 @@ class JobController extends Controller
             }
 
             if(empty($arrx["reqlist"])) {
-                return $this->jobservice->savejob($payload["job"], $payload["jobdet"]);
+                return $this->savejob($payload["job"], $payload["jobdet"]);
             }
 
             return response()->json(array("result" => false, "message" => "Job Post doesn't meet the following requirements:", "data" => $arrx, "errors" => $errors, "status" => 422));
+        } catch(Exception $e) {
+            return response()->json(array("result" => false, "message" => $e->getMessage(), "data" => []));
+        }
+    }
+
+    public function savejob(array $job, array $jobdet): JsonResponse
+    {
+        try 
+        {
+            return $this->jobservice->store($job, $jobdet);
         } catch(Exception $e) {
             return response()->json(array("result" => false, "message" => $e->getMessage(), "data" => []));
         }

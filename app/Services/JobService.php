@@ -11,7 +11,7 @@ class JobService
 {
     use Slug;
 
-    public function savejob(array $job, array $jobdet): JsonResponse
+    public function store(array $job, array $jobdet): JsonResponse
     {
          try {
             DB::beginTransaction();
