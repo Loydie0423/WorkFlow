@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Employer;
 
 use App\Http\Controllers\Controller;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
-    public function getcompanies(Request $request) 
+    public function getcompanies(Request $request): JsonResponse 
     {
         if(!$request->ajax()) {
             abort(400, "Invalid Request");
@@ -19,7 +20,7 @@ class CompanyController extends Controller
         return response()->json(array("result" => true, "message" => "Load.", "data" => $companies));
     }
 
-    public function selectcompany(Request $request) 
+    public function selectcompany(Request $request): JsonResponse 
     {
         try {
             DB::beginTransaction();

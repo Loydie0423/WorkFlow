@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers\Applicant;
 
-use App\Http\Controllers\Controller;
 use Exception;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class JobController extends Controller
 {
-    public function index() 
+    public function index(): View
     {
         $jobs = DB::table('jobs AS a')->join('companies AS b','a.company_id','=','b.id')->join('employers AS c','a.employer_id','=','c.id')->join('users AS d','c.user_id','=','d.id')->select('a.id','title','a.description','min_salary','max_salary','location','arrangement','b.name AS company_name','a.employer_id','d.first_name AS employer_fname','d.middle_name AS employer_mname', 'd.last_name AS employer_lname','a.employment_type','a.created_at','a.slug AS uuid')->whereIn('a.status',array('Active','Pending'))->get();
         return view('applicant.job.index', array('jobs' => $jobs));
     }
 
-    public function view(string $uuid) 
+    public function view(string $uuid): View 
     {
         $data = array("info" => [], "details" => []);
         $job = DB::table("jobs AS a")->join('companies AS b','a.company_id','=','b.id')->join('employers AS c','a.employer_id','=','c.id')->join('users AS d','c.user_id','=','d.id')->select('a.id','title','a.description','min_salary','max_salary','location','arrangement','slot','application_deadline','b.name AS company_name','b.url AS company_url','a.employer_id','d.first_name AS employer_fname','d.middle_name AS employer_mname', 'd.last_name AS employer_lname','employment_type','a.created_at AS published_date','application_deadline', DB::raw("0 AS vacancy"))->whereIn('a.status',array('Active','Pending'))->where('a.slug', $uuid)->first();
@@ -33,7 +35,7 @@ class JobController extends Controller
         return view('applicant.job.view', array('data' => $data));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         try{
             DB::beginTransaction();
@@ -57,13 +59,13 @@ class JobController extends Controller
         }
     }
 
-    public function savejobsindex() 
+    public function savejobsindex(): View
     {
         $data = DB::table("saved_jobs AS a")->join("jobs AS b","a.job_id","=","b.id")->join("applicants AS c","a.applicant_id","=","c.id")->join("companies AS d","b.company_id","=","d.id")->select("b.title", "d.name AS company_name", "b.arrangement", "b.location", "b.slug AS uuid")->where("c.user_id",auth()->user()->id)->get();
         return view("applicant.job.saved-job", array("jobs" => $data));
     }
 
-    public function savedjobsremove(string $uuid) 
+    public function savedjobsremove(string $uuid): JsonResponse
     {
         try 
         {   

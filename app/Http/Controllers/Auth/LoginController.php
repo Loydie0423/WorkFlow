@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class LoginController extends Controller
 {
-    public function login(Request $request) 
+    public function login(Request $request): JsonResponse
     {
         try {
             $validator = Validator::make($request->only('email','password'), array(

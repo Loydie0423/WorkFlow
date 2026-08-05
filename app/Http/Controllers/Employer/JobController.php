@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 
 class JobController extends Controller implements JobContracts
 {
@@ -21,12 +22,12 @@ class JobController extends Controller implements JobContracts
         $this->jobservice = new JobService();
     }
 
-    public function index() 
+    public function index(): View
     {
         return view("employer.job.index");
     }
 
-    public function joblist() 
+    public function joblist(): JsonResponse
     {
         $data = array();
         $job = DB::table("jobs AS a")->join("companies AS b","a.company_id","=","b.id")->join("employers AS c","a.employer_id","=","c.id")->join("users AS d","c.user_id","=","d.id")->join("job_categories AS e","a.job_category_id","=","e.id")->select("a.title","b.name","a.arrangement","a.location",DB::raw("FORMAT(a.min_salary,2) AS min_salary"),DB::raw("FORMAT(a.max_salary,2) AS max_salary"), "e.description AS category")->where("d.id", auth()->user()->id)->get();
@@ -47,13 +48,13 @@ class JobController extends Controller implements JobContracts
         return response()->json(array("result" => true, "message" => "Load.", "data" => $data));
     }
 
-    public function create() 
+    public function create(): View
     {
         $categories = DB::table("job_categories")->pluck("description", "id");
         return view("employer.job.create", array("categories" => $categories));
     }
 
-    public function validatejobpost(Request $request) 
+    public function validatejobpost(Request $request): JsonResponse
     {
         try {
             $arrx = array("reqlist" => []);

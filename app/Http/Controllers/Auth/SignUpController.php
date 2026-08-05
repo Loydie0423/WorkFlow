@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Exception;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 
 class SignUpController extends Controller
 {
-    public function store(Request $request) 
+    public function store(Request $request): JsonResponse;
     {
         try {
             $validator = Validator::make($request->all(), array(

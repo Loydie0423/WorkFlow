@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Applicant;
 
+use Exception;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\JsonResponse;
 
 class JobApplicationController extends Controller
 {
-    public function validateapplication(Request $request) 
+    public function validateapplication(Request $request): JsonResponse 
     {
         try 
         {
