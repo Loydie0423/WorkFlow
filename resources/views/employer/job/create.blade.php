@@ -199,6 +199,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                <a href="{{ route('employer.profile.index') }}" class="btn btn-sm btn-primary">Go to Profile</a>
             </div>
             </div>
         </div>

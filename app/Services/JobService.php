@@ -4,14 +4,13 @@ namespace App\Services;
 
 use Exception;
 use App\Helpers\Slug;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
 class JobService 
 {
     use Slug;
 
-    public function save(array $data): JsonResponse
+    public function save(array $data): void
     {
          try {
             DB::beginTransaction();
@@ -38,10 +37,8 @@ class JobService
             }
 
             DB::commit();
-            return response()->json(array("result" => true, "message" => "Saved.", "data" => [], "status" => 201));
         } catch(Exception $e) {
             DB::rollBack();
-            return response()->json(array("result" => false, "message" => $e->getMessage(), "data" => []));
         }
     }
 }

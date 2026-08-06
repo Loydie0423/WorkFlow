@@ -131,6 +131,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="{{ route("applicant.profile.index") }}" class="btn btn-primary">Go to Profile</a>
             </div>
             </div>
         </div>

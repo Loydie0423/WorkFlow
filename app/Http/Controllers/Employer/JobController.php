@@ -83,6 +83,7 @@ class JobController extends Controller
                 array_push($arrx["reqlist"], "No Job Details Found.");
             } 
 
+            $det = DB::table("employers")->where("user_id", auth()->user()->id)->first();
             if(empty($det->company_id)) {
                 array_push($arrx["reqlist"], "No Company Details Found.");
             }
@@ -109,10 +110,11 @@ class JobController extends Controller
             $result = $this->validatepostjob($payload);
             if(empty($result["reqlist"])) {
                 $data = array("job" => $result["data"]["job"], "jobdet" => $result["data"]["jobdet"]);
-                return $this->jobservice->save($data);
+                $this->jobservice->save($data);
+                return response()->json(array("result" => true, "message" => "Saved.", "data" => [], "status" => 201));
             }
 
-            return response()->json(array("result" => false, "message" => "Job Post doesn't meet the following requirements:", "data" => $result["reqlist"], "errors" => $result["errors"], "status" => 422));
+            return response()->json(array("result" => false, "message" => "Job Post doesn't meet the following requirements:", "data" => array("reqlist" => $result["reqlist"], "errors" => $result["errors"]), "status" => 422));
         } catch(Exception $e) {
             return response()->json(array("result" => false, "message" => $e->getMessage(), "data" => []));
         }

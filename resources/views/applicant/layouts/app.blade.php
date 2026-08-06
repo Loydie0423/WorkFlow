@@ -70,7 +70,7 @@
                                     <li class="nav-item"><a href="contact.html">Contact </a> </li>
                                     <li class="nav-item"><a href="#">Account</a>
                                         <ul class="sub-menu">
-                                            <li><a href="{{ route('employer.profile.index') }}">Profile</a></li>
+                                            <li><a href="{{ route('applicant.profile.index') }}">Profile</a></li>
                                             <li><a id="logout">Logout</a></li>
                                         </ul>
                                     </li>
@@ -519,6 +519,82 @@
                                 });
                             },
                             error : function() {
+                                Swal.fire({
+                                    toast: true,
+                                    icon: 'error',
+                                    title: 'Server Error!',
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            $("#manage-account-det-btn").on("click", function() {
+                $("#manage-account-det-modal").modal("show");
+            });
+
+            $("#manage-account-det-updatebtn").on("click", function() {
+                let data = {};
+                let fields = ["first_name", "middle_name", "last_name", "email" ,"address", "mobile_no", "birthdate"];
+
+                $.each(fields, function(key, item) {
+                    data[item] = $("input[name=account-profile-"+item+"]").val();
+                    $(".error-message").empty();
+                    $("input[name=account-profile-"+item+"]").removeClass("is-invalid");
+                });
+
+                Swal.fire({
+                    title: "Info!",
+                    text: "Are you sure?",
+                    icon: "info",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, i'm sure",
+                    confirmButtonColor: "#0275d8",
+                    reverseButtons: true
+                }).then((result) => {
+                    if(result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('applicant.profile.det.update') }}",
+                            method: "POST",
+                            dataType: "JSON",
+                            headers: {
+                                "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content")
+                            },
+                            data: data,
+                            success: function(e) {
+                                if(e.result) {
+                                    $("#manage-account-det-modal").modal("hide");
+                                    Swal.fire({
+                                        toast: true,
+                                        icon: "success",
+                                        title: e.message,
+                                        position: "top-end",
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                    window.location.reload();
+                                    return;
+                                }
+
+                                Swal.fire({
+                                    toast: true,
+                                    icon: "warning",
+                                    title: e.message,
+                                    position: "top-end",
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+
+                                $.each(e.data.errors, function(key, item) {
+                                    $("input[name=account-profile-"+key+"]").addClass("is-invalid");
+                                    $("input[name=account-profile-"+key+"]").closest(".form-group").find(".error-message").text(item);
+                                });
+                            },
+                            error: function(e) {
                                 Swal.fire({
                                     toast: true,
                                     icon: 'error',

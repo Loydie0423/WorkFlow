@@ -62,6 +62,7 @@ Route::group(array('middleware' => array('auth')), function() {
         Route::post('job/application/validate', array(ApplicantJobApplicationController::class, 'validateapplication'))->name('applicant.job.application.validate');
 
         Route::get('account/profile', array(ApplicantAccountController::class, 'profile'))->name('applicant.profile.index');
+        Route::post('account/profile/details/update', array(ApplicantAccountController::class, 'updateprofiledet'))->name('applicant.profile.det.update');
     });
 
     Route::get('account/profile/getcompany', array(CompanyController::class, 'getcurrentcompany'))->name('getcurrentcompany');

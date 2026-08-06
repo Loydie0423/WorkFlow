@@ -522,7 +522,7 @@
                             $("#validate-jobpost-list").append(list);
                         });
 
-                        $.each(e.errors, function(key, item) {
+                        $.each(e.data.errors, function(key, item) {
                             $("input[name="+key+"]").addClass("is-invalid");
                             $("textarea[name="+key+"]").addClass("is-invalid");
                             $("input[name="+key+"]").closest("div").find(".message").text(item);
