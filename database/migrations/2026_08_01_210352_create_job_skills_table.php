@@ -15,9 +15,9 @@ class CreateJobSkillsTable extends Migration
     {
         Schema::create('job_skills', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("applicant_id");
-            $table->string("name");
-            $table->integer("percentage_proficiency");
+            $table->foreignId("applicant_id")->constrained("applicants");
+            $table->string("skill_name");
+            $table->string("experience_level");
             $table->timestamps();
         });
     }

@@ -28,4 +28,21 @@ class AccountService {
             DB::rollBack();
         }
     }
+
+    public function saveskill($data): void 
+    {
+        try {
+            DB::beginTransaction();
+            $applicant = DB::table("applicants")->where("user_id", auth()->user()->id)->first();
+            DB::table("job_skills")->insert(array(
+                "applicant_id" => $applicant->id,
+                "skill_name" => $data["skill_name"],
+                "experience_level" => $data["experience_level"],
+                "created_at" => now()
+            ));
+            DB::commit();
+        } catch(Exception $e) {
+            DB::rollBack();
+        }
+    }
 }

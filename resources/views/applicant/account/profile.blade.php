@@ -87,11 +87,14 @@
 
                                     <div class="col-12 my-1">
                                         <div class="card shadow-lg">
-                                            <div class="card-header font-weight-bold">Skills</div>
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center-justify-content-start">
-                                                    <span class="badge badge-success">HTML</span>
+                                            <div class="card-header d-flex justify-content-between">
+                                                <span class="card-title font-weight-bold">Skills</span>
+                                                <div>
+                                                    <button class="btn btn-secondary btn-sm" id="manage-account-skills-btn"><i class="fas fa-plus"></i></button>
                                                 </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center justify-content-start" id="manage-account-skills-container"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -209,6 +212,46 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                 <button type="button" id="manage-account-det-updatebtn" class="btn btn-primary btn-sm">Update</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="manage-account-skills-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Skills</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row my-2">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Skill Name</label>
+                            <input type="text" name="manage-account-skill_name" class="form-control form-control-sm" placeholder="Enter skill name...">
+                            <span class="error-message text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Experince Level</label>
+                            <select name="manage-account-experience_level" class="form-control form-control-sm">
+                                <option selected disabled>Select Level</option>
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="proficient ">Proficient </option>
+                            </select>
+                            <span class="error-message text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" id="manage-account-skills-addbtn" class="btn btn-primary btn-sm">Add</button>
             </div>
             </div>
         </div>

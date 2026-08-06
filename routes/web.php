@@ -63,6 +63,8 @@ Route::group(array('middleware' => array('auth')), function() {
 
         Route::get('account/profile', array(ApplicantAccountController::class, 'profile'))->name('applicant.profile.index');
         Route::post('account/profile/details/update', array(ApplicantAccountController::class, 'updateprofiledet'))->name('applicant.profile.det.update');
+        Route::post('account/skills/add', array(ApplicantAccountController::class, 'addskills'))->name('applicant.profile.skills.add');
+        Route::get('account/skills/get', array(ApplicantAccountController::class, 'getskills'))->name('applicant.profile.skills.get');
     });
 
     Route::get('account/profile/getcompany', array(CompanyController::class, 'getcurrentcompany'))->name('getcurrentcompany');

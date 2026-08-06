@@ -239,7 +239,48 @@
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
     <script>
+
         $(document).ready(function() {
+            function loadskills() {
+                $("#manage-account-skills-container").empty();
+                $.ajax({
+                    url: "{{ route('applicant.profile.skills.get') }}",
+                    method: "GET",
+                    dataType: "JSON",
+                    headers: {
+                        "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content")
+                    },
+                    success: function(e) {
+                        let skills = e.data.skills;
+
+                        $.each(skills, function(key, item) {
+                            let exp = "";
+                            let badge = "";
+                            switch(item.experience_level) {
+                                case "beginner": exp = "secondary"; break;
+                                case "intermediate": exp = "primary"; break;
+                                case "proficient": exp = "success"; break;
+                            }
+
+                            badge = "<span class='badge badge-"+exp+" mr-1'>"+item.skill_name+"</span>";
+                            $("#manage-account-skills-container").append(badge);
+                        });
+                    },
+                    error: function(e) {
+                        Swal.fire({
+                                toast: true,
+                                icon: 'error',
+                                title: 'Server Error!',
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                    }
+                });
+            }
+
+            loadskills();
+
             let jobtable = $("#job-table").DataTable({
                 ajax: {
                     url: "{{ route('employer.job.list') }}",
@@ -592,6 +633,92 @@
                                 $.each(e.data.errors, function(key, item) {
                                     $("input[name=account-profile-"+key+"]").addClass("is-invalid");
                                     $("input[name=account-profile-"+key+"]").closest(".form-group").find(".error-message").text(item);
+                                });
+                            },
+                            error: function(e) {
+                                Swal.fire({
+                                    toast: true,
+                                    icon: 'error',
+                                    title: 'Server Error!',
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            $("#manage-account-skills-btn").on("click", function() {
+                $("#manage-account-skills-modal").modal("show");
+            });
+
+            $("#manage-account-skills-addbtn").on("click", function() {
+                let fields = ["skill_name", "experience_level"];
+
+                $.each(fields, function(key, item) {
+                    $("input[name=manage-account-"+item+"]").removeClass("is-invalid");
+                    $("select[name=manage-account-"+item+"]").removeClass("is-invalid");
+                    $(".error-message").empty();
+                });
+
+                Swal.fire({
+                    title: "Info!",
+                    text: "Are you sure?",
+                    icon: "info",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, i'm sure",
+                    confirmButtonColor: "#0275d8",
+                    reverseButtons: true
+                }).then((result) => {
+                    if(result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('applicant.profile.skills.add') }}",
+                            method: "POST",
+                            dataType: "JSON",
+                            headers: {
+                                "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content")
+                            },
+                            data: {
+                                skill_name: $("input[name=manage-account-skill_name]").val(),
+                                experience_level: $("select[name=manage-account-experience_level]").val()
+                            },
+                            success: function(e) {
+                                if(e.result) {
+                                    loadskills();
+                                    $("#manage-account-skills-modal").modal("hide");
+                                    $.each(fields, function(key, item) {
+                                        $("input[name=manage-account-"+item+"]").val("");
+                                        $("select[name=manage-account-"+item+"] option:first").prop("selected", true);
+                                    });
+
+                                    Swal.fire({
+                                        toast: true,
+                                        icon: "success",
+                                        title: e.message,
+                                        position: "top-end",
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+
+                                    return;
+                                }
+
+                                 Swal.fire({
+                                    toast: true,
+                                    icon: "warning",
+                                    title: e.message,
+                                    position: "top-end",
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+
+                                $.each(e.data.errors, function(key, item) {
+                                    $("input[name=manage-account-"+key+"]").addClass("is-invalid");
+                                    $("select[name=manage-account-"+key+"]").addClass("is-invalid");
+                                    $("input[name=manage-account-"+key+"]").closest(".form-group").find(".error-message").text(item);
+                                    $("select[name=manage-account-"+key+"]").closest(".form-group").find(".error-message").text(item);
                                 });
                             },
                             error: function(e) {
