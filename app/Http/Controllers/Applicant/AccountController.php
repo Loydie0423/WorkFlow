@@ -62,6 +62,12 @@ class AccountController extends Controller
         return response()->json(array("result" => false, "message" => $validate["message"], "data" => $validate["data"]));
     }
 
+    public function getskills(): JsonResponse
+    {
+        $skills = DB::table("job_skills AS a")->join("applicants AS b","a.applicant_id","=","b.id")->join("users AS c","b.user_id","=","c.id")->where("b.user_id", auth()->user()->id)->select("a.id","a.skill_name", "experience_level")->get();
+        return response()->json(array("result" => true, "message" => "Success", "data" => array("skills" => $skills)));
+    }
+
     public function validateskill(array $data): array 
     {
         $errors = array();
@@ -80,7 +86,7 @@ class AccountController extends Controller
         }
 
         $skills["cc"] = DB::table("job_skills")->where("applicant_id", $applicant->id)->count();
-        if($skills["cc"] >= 10) {
+        if($skills["cc"] >= 20) {
             $errors["skill_name"] = "Skill reached maximum limit of 20.";
             return array("result" => false, "message" => "Validation Error!", "data" => array("errors" => $errors));
         }
@@ -100,9 +106,16 @@ class AccountController extends Controller
         return response()->json(array("result" => false, "message" => $validate["message"], "data" => array("errors" => $validate["data"]["errors"])));        
     }
 
-    public function getskills(): JsonResponse
+    public function removeskills(Request $request) 
     {
-        $skills = DB::table("job_skills AS a")->join("applicants AS b","a.applicant_id","=","b.id")->join("users AS c","b.user_id","=","c.id")->where("b.user_id", auth()->user()->id)->select("a.skill_name", "experience_level")->get();
-        return response()->json(array("result" => true, "message" => "Success", "data" => array("skills" => $skills)));
+        if(isset($request->skillname) && isset($request->skillid)) {
+            $data = array("skill_id" => $request->skillid ,"skill_name" => $request->skillname);
+            $this->accservice->removeskill($data);
+            return response()->json(array("result" => true, "message" => "Success", "data" => []));
+        }
+
+        $errors["skill_id"] = "Skill ID is required.";
+        $errors["skill_name"] = "Skill name is required.";
+        return response()->json(array("result" => false, "message" => "Validation Error!", "data" => array("errors" => $errors)));
     }
 }

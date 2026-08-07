@@ -45,4 +45,15 @@ class AccountService {
             DB::rollBack();
         }
     }
+
+    public function removeskill(array $data): void 
+    {
+        try{
+            DB::beginTransaction();
+            DB::table("job_skills AS a")->join("applicants AS b","a.applicant_id","=","b.id")->where("a.id", $data["skill_id"])->where("a.skill_name", $data["skill_name"])->where("b.user_id", auth()->user()->id)->delete();
+            DB::commit();
+        } catch(Exception $e) {
+           DB::rollBack();
+        }
+    }
 }

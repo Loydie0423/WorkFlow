@@ -256,13 +256,14 @@
                         $.each(skills, function(key, item) {
                             let exp = "";
                             let badge = "";
+
                             switch(item.experience_level) {
                                 case "beginner": exp = "secondary"; break;
                                 case "intermediate": exp = "primary"; break;
                                 case "proficient": exp = "success"; break;
                             }
 
-                            badge = "<span class='badge badge-"+exp+" mr-1'>"+item.skill_name+"</span>";
+                            badge = "<span class='badge badge-"+exp+" skill-badge'><p>"+item.skill_name+"</p> <p class='badge-remove-skill-btn' data-skill_id='"+item.id+"' data-skill_name='"+item.skill_name+"'>x<p></span>";
                             $("#manage-account-skills-container").append(badge);
                         });
                     },
@@ -734,6 +735,62 @@
                         });
                     }
                 });
+            });
+
+            $("#manage-account-skills-container").on("click", ".badge-remove-skill-btn", function() {
+                let skillid = $(this).data("skill_id"); 
+                let skillname = $(this).data("skill_name");
+
+                Swal.fire({
+                    title: "Warning!",
+                    text: "Are you sure you want to remove "+ skillname +"?",
+                    icon: "warning",
+                    confirmButtonText: "Yes, i'm sure",
+                    showCancelButton: true,
+                    confirmButtonColor: "#0275d8",
+                    reverseButtons: true
+                }).then((result) => {
+                    if(result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('applicant.profile.skills.remove') }}",
+                            method: "POST",
+                            dataType: "JSON",
+                            headers: {
+                                "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content")
+                            },
+                            data: {
+                                skillid: skillid,
+                                skillname: skillname
+                            },
+                            success: function(e) {
+                                if(e.result) {
+                                    loadskills();
+                                     Swal.fire({
+                                        toast: true,
+                                        icon: "success",
+                                        title: e.message,
+                                        position: "top-end",
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                    return;
+                                }
+                            },
+                            error: function(e) {
+                                Swal.fire({
+                                    toast: true,
+                                    icon: 'error',
+                                    title: 'Server Error!',
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
+                        });
+                    }
+                });
+
+
             });
 
             $("#logout").on("click", function() {
