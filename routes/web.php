@@ -69,6 +69,7 @@ Route::group(array('middleware' => array('auth')), function() {
 
         Route::get('account/educational-attainment/get', array(ApplicantAccountController::class, 'getducationalatt'))->name('applicant.profile.educationalatt.get');
         Route::post('account/educational-attainment/add', array(ApplicantAccountController::class, 'addeducationalatt'))->name('applicant.profile.educationalatt.add');
+        Route::post('account/educational-attainment/update', array(ApplicantAccountController::class, 'updateeducationalatt'))->name('applicant.profile.educationalatt.update');
     });
 
     Route::get('account/profile/getcompany', array(CompanyController::class, 'getcurrentcompany'))->name('getcurrentcompany');

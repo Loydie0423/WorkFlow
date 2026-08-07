@@ -121,7 +121,7 @@ class AccountController extends Controller
 
     public function getducationalatt(): JsonResponse 
     {
-        $data = DB::table("educational_attainments AS a")->join("applicants AS b","a.applicant_id","=","b.id")->where("b.user_id", auth()->user()->id)->get();
+        $data = DB::table("educational_attainments AS a")->join("applicants AS b","a.applicant_id","=","b.id")->select("a.id","a.level","a.field_of_study","a.from","a.to","a.institution")->where("b.user_id", auth()->user()->id)->get();
         return response()->json(array("data" => $data));
     }
 
@@ -153,6 +153,19 @@ class AccountController extends Controller
         if($validate["result"]) {
             $data = $request->only("level","field_of_study","from", "to", "institution");
             $this->accservice->saveeducationalatt($data);
+            $resdata = $this->getducationalatt()->getData(true);
+            return response()->json(array("result" => true, "message" => "Success", "data" => $resdata["data"]));
+        }
+
+        return response()->json(array("result" => false, "message" => $validate["message"], "data" => $validate["data"]));
+    }
+
+    public function updateeducationalatt(Request $request): JsonResponse 
+    {
+        $data = $request->only("id","level","field_of_study","from", "to", "institution");
+        $validate = $this->validateaddeducationatt($data);    
+        if($validate["result"]) {
+            $this->accservice->updateeducationalatt($data);
             $resdata = $this->getducationalatt()->getData(true);
             return response()->json(array("result" => true, "message" => "Success", "data" => $resdata["data"]));
         }

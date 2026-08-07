@@ -377,7 +377,10 @@
                     {data: function(e) {
                         return e.from+"-"+e.to;
                     }},
-                    {data: "institution"}
+                    {data: "institution"},
+                    {data: function() {
+                        return "<button class='btn btn-primary btn-sm manage-account-education-det-btn'><i class='fas fa-edit'></i></button>";
+                    }}
                 ]
             });
 
@@ -912,6 +915,125 @@
                             }
                         });
                     }
+                });
+            });
+
+            $("#manage-account-education-att-table tbody").on("click","tr",".manage-account-education-det-btn", function() {
+                let data = educationalatttable.row($(this)).data();
+                let yearinput = ["from", "to"];
+                let fields = ["educational-att-id","level", "field_of_study", "from", "to", "institution"];
+
+                $(".error-message").empty();
+                $("input[name=educational-att-id]").val("");
+                $.each(fields, function(key, item) {
+                    if(yearinput.includes(item)) {
+                        $("input[name=edit-educational-att-"+item+"]").val("");
+                        $("input[name=edit-educational-att-"+item+"]").removeClass("is-invalid");
+                    } else {
+                        $("input[name=edit-"+item+"]").val("");
+                        $("input[name=edit-"+item+"]").removeClass("is-invalid");
+                        $("select[name=edit-"+item+"] option:first").prop("selected", true);
+                        $("select[name=edit-"+item+"]").removeClass("is-invalid");
+                    }
+                });
+
+                $("input[name=educational-att-id]").val(data.id);
+                $("select[name=edit-level]").val(data.level);
+                $("input[name=edit-field_of_study]").val(data.field_of_study);
+                $("input[name=edit-educational-att-from]").val(data.from);
+                $("input[name=edit-educational-att-to]").val(data.to);
+                $("input[name=edit-institution]").val(data.institution);
+                $("#manage-account-educational-att-edit-modal").modal("show");
+            });
+
+            $("#manage-account-educational-att-updatetn").on("click", function() {
+                let yearinput = ["from", "to"];
+                let fields = ["educational-att-id","level", "field_of_study", "from", "to", "institution"];
+
+                $(".error-message").empty();
+                $.each(fields, function(key, item) {
+                    if(yearinput.includes(item)) {
+                        $("input[name=edit-educational-att-"+item+"]").removeClass("is-invalid");
+                    } else {
+                        $("input[name=edit-"+item+"]").removeClass("is-invalid");
+                        $("select[name=edit-"+item+"]").removeClass("is-invalid");
+                    }
+                });
+
+                Swal.fire({
+                    title: "Info!",
+                    text: "Are you sure?",
+                    icon: "info",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, i'm sure",
+                    confirmButtonColor: "#0275d8",
+                    reverseButtons: true
+                }).then((result) => {
+                    $.ajax({
+                        url: "{{ route('applicant.profile.educationalatt.update') }}",
+                        method: "POST",
+                        dataType: "JSON",
+                        headers: {
+                            "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content")
+                        },
+                        data: {
+                            id: $("input[name=educational-att-id]").val(),
+                            level: $("select[name=edit-level]").val(),
+                            field_of_study: $("input[name=edit-field_of_study]").val(),
+                            from: $("input[name=edit-educational-att-from]").val(),
+                            to: $("input[name=edit-educational-att-to]").val(),
+                            institution: $("input[name=edit-institution]").val()
+                        },
+                        success: function(e) {
+                            if(e.result) {
+                                educationalatttable.clear().draw();
+                                educationalatttable.rows.add(e.data).draw();
+                                $("#manage-account-educational-att-edit-modal").modal("hide");
+
+                                $("input[name=educational-att-id]").val("");
+                                $.each(fields, function(key, item) {
+                                    if(yearinput.includes(item)) {
+                                        $("input[name=edit-educational-att-"+item+"]").removeClass("is-invalid");
+                                    } else {
+                                        $("input[name=edit"+item+"]").removeClass("is-invalid");
+                                        $("select[name=edit"+item+"]").removeClass("is-invalid");
+                                    }
+                                });
+
+                               Swal.fire({
+                                    toast: true,
+                                    icon: "success",
+                                    title: e.message,
+                                    position: "top-end",
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                                return;
+                            }
+
+                            $.each(e.data.errors, function(key, item) {
+                                if(yearinput.includes(key)) {
+                                    $("input[name=edit-educational-att-"+key+"]").addClass("is-invalid");
+                                    $("input[name=edit-educational-att-"+key+"]").closest(".form-group").find(".error-message").text(item);
+                                } else {
+                                    $("select[name=edit-"+key+"]").addClass("is-invalid");
+                                    $("input[name=edit-"+key+"]").addClass("is-invalid");
+                                    $("select[name=edit-"+key+"]").closest(".form-group").find(".error-message").text(item);
+                                    $("input[name=edit-"+key+"]").closest(".form-group").find(".error-message").text(item);
+                                }
+                            });
+                        },
+                        error: function() {
+                            Swal.fire({
+                                toast: true,
+                                icon: 'error',
+                                title: 'Server Error!',
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        }
+                    });
                 });
             });
 

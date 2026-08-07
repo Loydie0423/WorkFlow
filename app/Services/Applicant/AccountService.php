@@ -76,4 +76,23 @@ class AccountService {
            DB::rollBack();
         }
     }
+
+    public function updateeducationalatt(array $data): void 
+    {
+        try{
+            DB::beginTransaction();
+            $applicant = DB::table("applicants")->select("id")->where("user_id", auth()->user()->id)->first();
+            DB::table("educational_attainments")->where("id", $data["id"])->where("applicant_id", $applicant->id)->update(array(
+                "level" => $data["level"],
+                "field_of_study" => $data["field_of_study"],
+                "from" => $data["from"],
+                "to" => $data["to"],
+                "institution" => $data["institution"],
+                "updated_at" => now()
+            ));
+            DB::commit();
+        } catch(Exception $e) {
+           DB::rollBack();
+        }
+    }
 }

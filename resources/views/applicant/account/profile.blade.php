@@ -115,6 +115,7 @@
                                                             <th>Field of Study</th>
                                                             <th>Year</th>
                                                             <th>Institution</th>
+                                                            <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody></tbody>
@@ -342,6 +343,73 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                 <button type="button" id="manage-account-educational-att-addbtn" class="btn btn-primary btn-sm">Add</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="modal fade" id="manage-account-educational-att-edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Studies</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row my-2">
+                    <input type="hidden" name="educational-att-id">
+                    <div class="col-xl-4 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label>Level</label>
+                            <select name="edit-level" class="form-control form-control-sm">
+                                <option selected disabled>Select Level</option>
+                                <option value="Primary">Primary</option>
+                                <option value="Secondary">Secondary</option>
+                                <option value="Tertiary">Tertiary</option>
+                            </select>
+                            <span class="error-message text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-8 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label>Field of Study</label>
+                            <input type="text" name="edit-field_of_study" class="form-control form-control-sm" placeholder="Enter field of study">
+                            <span class="error-message text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="col-xl-4 col-md-6 col-sm-12">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>From</label>
+                                    <input type="number" name="edit-educational-att-from" class="form-control form-control-sm" placeholder="From">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>To</label>
+                                    <input type="number" name="edit-educational-att-to" class="form-control form-control-sm" placeholder="To">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-8 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label>Institution</label>
+                            <input type="text" name="edit-institution" class="form-control form-control-sm" placeholder="Enter institution">
+                            <span class="error-message text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" id="manage-account-educational-att-updatetn" class="btn btn-primary btn-sm">Update</button>
             </div>
             </div>
         </div>
