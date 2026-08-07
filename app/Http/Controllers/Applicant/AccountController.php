@@ -118,4 +118,45 @@ class AccountController extends Controller
         $errors["skill_name"] = "Skill name is required.";
         return response()->json(array("result" => false, "message" => "Validation Error!", "data" => array("errors" => $errors)));
     }
+
+    public function getducationalatt(): JsonResponse 
+    {
+        $data = DB::table("educational_attainments AS a")->join("applicants AS b","a.applicant_id","=","b.id")->where("b.user_id", auth()->user()->id)->get();
+        return response()->json(array("data" => $data));
+    }
+
+    public function validateaddeducationatt(array $data): array 
+    {
+        $errors = array();
+        $validator = Validator::make($data, array(
+            "level" => array("required","max:255"),
+            "field_of_study" => array("required","max:255"),
+            "from" => array("required","numeric","lte:to"),
+            "to" => array("required","numeric","gte:from"),
+            "institution" => array("required","max:255")
+        ));
+
+        if($validator->fails()) {
+            foreach($validator->errors()->toArray() AS $key => $item) {
+                $errors[$key] = $item[0];
+            }
+
+            return array("result" => false, "message" => "Validation Error!", "data" => array("errors" => $errors));
+        }
+
+        return array("result" => true, "message" => "Success", "data" => []);
+    }
+
+    public function addeducationalatt(Request $request): JsonResponse 
+    {
+        $validate = $this->validateaddeducationatt($request->only("level","field_of_study","from", "to", "institution"));    
+        if($validate["result"]) {
+            $data = $request->only("level","field_of_study","from", "to", "institution");
+            $this->accservice->saveeducationalatt($data);
+            $resdata = $this->getducationalatt()->getData(true);
+            return response()->json(array("result" => true, "message" => "Success", "data" => $resdata["data"]));
+        }
+
+        return response()->json(array("result" => false, "message" => $validate["message"], "data" => $validate["data"]));
+    }
 }

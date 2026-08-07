@@ -66,6 +66,9 @@ Route::group(array('middleware' => array('auth')), function() {
         Route::get('account/skills/get', array(ApplicantAccountController::class, 'getskills'))->name('applicant.profile.skills.get');
         Route::post('account/skills/add', array(ApplicantAccountController::class, 'addskills'))->name('applicant.profile.skills.add');
         Route::post('account/skills/remove', array(ApplicantAccountController::class, 'removeskills'))->name('applicant.profile.skills.remove');
+
+        Route::get('account/educational-attainment/get', array(ApplicantAccountController::class, 'getducationalatt'))->name('applicant.profile.educationalatt.get');
+        Route::post('account/educational-attainment/add', array(ApplicantAccountController::class, 'addeducationalatt'))->name('applicant.profile.educationalatt.add');
     });
 
     Route::get('account/profile/getcompany', array(CompanyController::class, 'getcurrentcompany'))->name('getcurrentcompany');

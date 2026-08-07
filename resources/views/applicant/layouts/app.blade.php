@@ -362,6 +362,25 @@
                 ]
             });
 
+            let educationalatttable = $("#manage-account-education-att-table").DataTable({
+                ajax: {
+                    url: "{{ route('applicant.profile.educationalatt.get') }}",
+                    method: "GET"
+                },
+                searching: false,
+                paging: false,
+                ordering: false,
+                info: true,
+                columns:[
+                    {data: "level"},
+                    {data: "field_of_study"},
+                    {data: function(e) {
+                        return e.from+"-"+e.to;
+                    }},
+                    {data: "institution"}
+                ]
+            });
+
             $("#search-company-modal").on("shown.bs.modal", function() {
 
                 if(profilecompanytable.rows().count() > 0) {
@@ -789,8 +808,111 @@
                         });
                     }
                 });
+            });
 
+            $("#manage-account-educational-att-btn").on("click", function() {
+                $("#manage-account-educational-att-modal").modal("show");
+            });
 
+            $("#manage-account-educational-att-addbtn").on("click", function() {
+                let yearinput = ["from", "to"];
+                let fields = ["level", "field_of_study", "from", "to", "institution"];
+
+                $(".error-message").empty();
+                $.each(fields, function(key, item) {
+                    if(yearinput.includes(item)) {
+                        $("input[name=educational-att-"+item+"]").removeClass("is-invalid");
+                    } else {
+                        $("input[name="+item+"]").removeClass("is-invalid");
+                        $("select[name="+item+"]").removeClass("is-invalid");
+                    }
+                });
+
+                Swal.fire({
+                    title: "Info!",
+                    text: "are you sure?",
+                    icon: "info",
+                    confirmButtonText: "Yes, i'm sure",
+                    showCancelButton: true,
+                    confirmButtonColor: "#0275d8",
+                    reverseButtons: true
+                }).then((result) => {
+                    if(result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('applicant.profile.educationalatt.add') }}",
+                            method: "POST",
+                            dataType: "JSON",
+                            headers: {
+                                "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content")
+                            },
+                            data: {
+                                level: $("select[name=level]").val(),
+                                field_of_study: $("input[name=field_of_study]").val(),
+                                from: $("input[name=educational-att-from]").val(),
+                                to: $("input[name=educational-att-to]").val(),
+                                institution: $("input[name=institution]").val()
+                            },
+                            success: function(e) {
+                                if(e.result) {
+                                    educationalatttable.clear().draw();
+                                    educationalatttable.rows.add(e.data).draw();
+                                    $("#manage-account-educational-att-modal").modal("hide");
+                                    $("select[name=level] option:first").prop("selected", true);
+
+                                    $.each(fields, function(key, item) {
+                                        if(yearinput.includes(item)) {
+                                            $("input[name=educational-att-"+item+"]").val("");
+                                        } else {
+                                            $("input[name="+item+"]").val("");
+                                        }
+                                    });
+
+                                    Swal.fire({
+                                        toast: true,
+                                        icon: "success",
+                                        title: e.message,
+                                        position: "top-end",
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                    return;
+                                }
+
+                                Swal.fire({
+                                    toast: true,
+                                    icon: "warning",
+                                    title: e.message,
+                                    position: "top-end",
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+
+                                $.each(e.data.errors, function(key, item) {
+                                    if(yearinput.includes(key)) {
+                                        $("input[name=educational-att-"+key+"]").addClass("is-invalid");
+                                        $("input[name=educational-att-"+key+"]").closest(".form-group").find(".error-message").text(item);
+                                    } else {
+                                        $("select[name="+key+"]").addClass("is-invalid");
+                                        $("input[name="+key+"]").addClass("is-invalid");
+                                        $("select[name="+key+"]").closest(".form-group").find(".error-message").text(item);
+                                        $("input[name="+key+"]").closest(".form-group").find(".error-message").text(item);
+                                    }
+                                });
+                                return;
+                            },
+                            error: function(e) {
+                                Swal.fire({
+                                    toast: true,
+                                    icon: 'error',
+                                    title: 'Server Error!',
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
+                        });
+                    }
+                });
             });
 
             $("#logout").on("click", function() {
