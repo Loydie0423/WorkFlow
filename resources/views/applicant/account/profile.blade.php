@@ -151,7 +151,7 @@
                                     <div class="col-12 my-1">
                                        <div class="card shadow-lg">
                                             <div class="card-header">
-                                                <span class="font-weight-bold">Utitlities</span>
+                                                <span class="font-weight-bold">Utilities</span>
                                             </div>
                                             <div class="card-body">
                                                 <div class="row">
