@@ -370,7 +370,7 @@
                 searching: false,
                 paging: false,
                 ordering: false,
-                info: true,
+                info: false,
                 columns:[
                     {data: "level"},
                     {data: "field_of_study"},
@@ -380,6 +380,28 @@
                     {data: "institution"},
                     {data: function() {
                         return "<button class='btn btn-primary btn-sm manage-account-education-det-btn'><i class='fas fa-edit'></i></button>";
+                    }}
+                ]
+            });
+
+            let workexptable = $("#manage-account-work-exp-table").DataTable({
+                ajax: {
+                    url: "{{ route('applicant.profile.workexp.get') }}",
+                    method: "GET"
+                },
+                data: [],
+                searching: false,
+                ordering: false,
+                paging: false, 
+                info: false,
+                columns: [
+                    {data: "company_name"},
+                    {data: "job_title"},
+                    {data: function(e) {
+                        return e.from+"-"+e.to;
+                    }},
+                    {data: function(e) {
+                        return "<div class='d-flex justify-content-start align-items-center'><button class='btn btn-success btn-sm mr-1 view-work-exp-btn'><i class='fas fa-eye'></i></button><button class='btn btn-primary btn-sm mr-1 edit-work-exp-btn'><i class='fas fa-edit'></i></button></div>";
                     }}
                 ]
             });
@@ -1020,6 +1042,242 @@
                                     $("input[name=edit-"+key+"]").addClass("is-invalid");
                                     $("select[name=edit-"+key+"]").closest(".form-group").find(".error-message").text(item);
                                     $("input[name=edit-"+key+"]").closest(".form-group").find(".error-message").text(item);
+                                }
+                            });
+                        },
+                        error: function() {
+                            Swal.fire({
+                                toast: true,
+                                icon: 'error',
+                                title: 'Server Error!',
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        }
+                    });
+                });
+            });
+
+            $("#manage-account-work-exp-btn").on("click", function() {
+                let textareainput = ["description"];
+                let fields = ["company_name","job_title", "from", "to", "description"];
+
+                $(".error-message").empty();
+                $.each(fields, function(key, item) {
+                    if(textareainput.includes(item)) {
+                        $("textarea[name=work-exp-"+item+"]").val("");
+                        $("textarea[name=work-exp-"+item+"]").removeClass("is-invalid");
+                    } else {
+                        $("input[name=work-exp-"+item+"]").val("");
+                        $("input[name=work-exp-"+item+"]").removeClass("is-invalid");
+                    }
+                });
+
+                $("#manage-account-work-exp-modal").modal("show");
+            });
+
+            $("#manage-account-work-exp-addbtn").on("click", function() {
+                let textareainput = ["description"];
+                let fields = ["company_name","job_title", "from", "to", "description"];
+
+                 $.each(fields, function(key, item) {
+                    if(textareainput.includes(item)) {
+                        $("textarea[name=work-exp-"+item+"]").removeClass("is-invalid");
+                    } else {    
+                        $("input[name=work-exp-"+item+"]").removeClass("is-invalid");
+                    }
+                });
+
+                 Swal.fire({
+                    title: "Info!",
+                    text: "are you sure?",
+                    icon: "info",
+                    confirmButtonText: "Yes, i'm sure",
+                    showCancelButton: true,
+                    confirmButtonColor: "#0275d8",
+                    reverseButtons: true
+                }).then((result) => {
+                    if(result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('applicant.profile.workexp.add') }}",
+                            method: "POST",
+                            dataType: "JSON",
+                            headers: {
+                                "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content")
+                            },
+                            data: {
+                                company_name: $("input[name=work-exp-company_name]").val(),
+                                job_title: $("input[name=work-exp-job_title]").val(),
+                                from: $("input[name=work-exp-from]").val(),
+                                to: $("input[name=work-exp-to]").val(),
+                                description: $("textarea[name=work-exp-description]").val()
+                            },
+                            success: function(e) {
+                                if(e.result) {
+                                    workexptable.clear().draw();
+                                    workexptable.rows.add(e.data).draw();
+                                    $("#manage-account-work-exp-modal").modal("hide");
+
+                                    $.each(fields, function(key, item) {
+                                        if(textareainput.includes(item)) {
+                                            $("textarea[name=work-exp-"+item+"]").val("");
+                                        } else {
+                                            $("input[name=work-exp-"+item+"]").val("");
+                                        }
+                                    });
+
+                                    Swal.fire({
+                                        toast: true,
+                                        icon: "success",
+                                        title: e.message,
+                                        position: "top-end",
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                    return;
+                                }
+
+                                Swal.fire({
+                                    toast: true,
+                                    icon: "warning",
+                                    title: e.message,
+                                    position: "top-end",
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+
+                                $.each(e.data.errors, function(key, item) {
+                                    if(textareainput.includes(key)) {
+                                        $("textarea[name=work-exp-"+key+"]").addClass("is-invalid");
+                                        $("textarea[name=work-exp-"+key+"]").closest(".form-group").find(".error-message").text(item);
+                                    } else {
+                                        $("input[name=work-exp-"+key+"]").addClass("is-invalid");
+                                        $("input[name=work-exp-"+key+"]").closest(".form-group").find(".error-message").text(item);
+                                    }
+                                });
+                                return;
+                            },
+                            error: function(e) {
+                                Swal.fire({
+                                    toast: true,
+                                    icon: 'error',
+                                    title: 'Server Error!',
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            $("#manage-account-work-exp-table tbody").on("click", ".view-work-exp-btn", function() {
+                let data = workexptable.row($(this).closest("tr")).data();
+                let textareainput = ["description"];
+
+                $.each(data, function(key, item){   
+                    if(textareainput.includes(key)) {
+                        $("textarea[name=work-exp-view-"+key+"]").val(item);
+                    } else {
+                        $("input[name=work-exp-view-"+key+"]").val(item);
+                    }
+                });
+
+                $("#manage-account-work-exp-view-modal").modal("show");
+            })
+
+            $("#manage-account-work-exp-table tbody").on("click", ".edit-work-exp-btn", function() {
+                let textareainput = ["description"];
+                let data = workexptable.row($(this).closest("tr")).data();
+
+                $(".error-message").empty();
+                $("input[name=work-exp-id]").val(data.id);
+                $.each(data, function(key, item) {
+                    if(textareainput.includes(key)) {
+                        $("textarea[name=work-exp-edit-"+key+"]").val(item);
+                        $("textarea[name=work-exp-edit-"+key+"]").removeClass("is-invalid");
+                    } else {
+                        $("input[name=work-exp-edit-"+key+"]").val(item);
+                        $("input[name=work-exp-edit-"+key+"]").removeClass("is-invalid");
+                    }
+                });
+
+                $("#manage-account-work-exp-edit-modal").modal("show");
+            });
+
+            $("#manage-account-work-exp-updatebtn").on("click", function() {
+                let textareainput = ["description"];
+                let fields = ["work-exp-id","company_name", "job_title", "from", "to", "description"];
+
+                $(".error-message").empty();
+                $.each(fields, function(key, item) {
+                    if(textareainput.includes(item)) {
+                        $("input[name=work-exp-edit-"+item+"]").removeClass("is-invalid");
+                    } else {
+                        $("input[name=work-exp-edit-"+item+"]").removeClass("is-invalid");
+                        $("select[name=work-exp-edit-"+item+"]").removeClass("is-invalid");
+                    }
+                });
+
+                Swal.fire({
+                    title: "Info!",
+                    text: "Are you sure?",
+                    icon: "info",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, i'm sure",
+                    confirmButtonColor: "#0275d8",
+                    reverseButtons: true
+                }).then((result) => {
+                    $.ajax({
+                        url: "{{ route('applicant.profile.workexp.update') }}",
+                        method: "POST",
+                        dataType: "JSON",
+                        headers: {
+                            "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content")
+                        },
+                        data: {
+                            id: $("input[name=work-exp-id]").val(),
+                            company_name: $("input[name=work-exp-edit-company_name]").val(),
+                            job_title: $("input[name=work-exp-edit-job_title]").val(),
+                            from: $("input[name=work-exp-edit-from]").val(),
+                            to: $("input[name=work-exp-edit-to]").val(),
+                            description: $("textarea[name=work-exp-edit-description]").val()
+                        },
+                        success: function(e) {
+                            if(e.result) {
+                                workexptable.clear().draw();
+                                workexptable.rows.add(e.data).draw();
+                                $("#manage-account-work-exp-edit-modal").modal("hide");
+
+                                $("input[name=work-exp-id]").val("");
+                                $.each(fields, function(key, item) {
+                                    if(textareainput.includes(item)) {
+                                        $("textarea[name=work-exp-edit-"+item+"]").removeClass("is-invalid");
+                                    } else {
+                                        $("input[name=work-exp-edit-"+item+"]").removeClass("is-invalid");
+                                    }
+                                });
+
+                               Swal.fire({
+                                    toast: true,
+                                    icon: "success",
+                                    title: e.message,
+                                    position: "top-end",
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                                return;
+                            }
+
+                            $.each(e.data.errors, function(key, item) {
+                                if(textareainput.includes(key)) {
+                                    $("textarea[name=work-exp-edit-"+key+"]").addClass("is-invalid");
+                                    $("textarea[name=work-exp-edit-"+key+"]").closest(".form-group").find(".error-message").text(item);
+                                } else {
+                                    $("input[name=work-exp-edit-"+key+"]").addClass("is-invalid");
+                                    $("input[name=work-exp-edit-"+key+"]").closest(".form-group").find(".error-message").text(item);
                                 }
                             });
                         },

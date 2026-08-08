@@ -95,4 +95,43 @@ class AccountService {
            DB::rollBack();
         }
     }
+
+    public function saveworkexp(array $data): void 
+    {
+        try{
+            DB::beginTransaction();
+            $applicant = DB::table("applicants")->where("user_id", auth()->user()->id)->first();
+            DB::table("work_experiences")->insert(array(
+                "applicant_id" => $applicant->id,
+                "company_name" => $data["company_name"],
+                "job_title" => $data["job_title"],
+                "from" => $data["from"],
+                "to" => $data["to"],
+                "description" => $data["description"],
+                "created_at" => now()
+            ));
+            DB::commit();
+        } catch(Exception $e) {
+           DB::rollBack();
+        }
+    }
+
+    public function updateworkexp(array $data): void 
+    {
+        try{
+            DB::beginTransaction();
+            $applicant = DB::table("applicants")->select("id")->where("user_id", auth()->user()->id)->first();
+            DB::table("work_experiences")->where("id", $data["id"])->where("applicant_id", $applicant->id)->update(array(
+                "company_name" => $data["company_name"],
+                "job_title" => $data["job_title"],
+                "from" => $data["from"],
+                "to" => $data["to"],
+                "description" => $data["description"],
+                "updated_at" => now()
+            ));
+            DB::commit();
+        } catch(Exception $e) {
+           DB::rollBack();
+        }
+    }
 }

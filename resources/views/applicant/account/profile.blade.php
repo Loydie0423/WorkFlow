@@ -123,6 +123,46 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="col-12 my-1">
+                                        <div class="card shadow-lg">
+                                            <div class="card-header d-flex justify-content-between">
+                                                <span class="card-title font-weight-bold">Work Experience</span>
+                                                <div>
+                                                    <button class="btn btn-secondary btn-sm" id="manage-account-work-exp-btn"><i class="fas fa-plus"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <table class="table table-bordered" id="manage-account-work-exp-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Company Name</th>
+                                                            <th>Job Title</th>
+                                                            <th>Year</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 my-1">
+                                       <div class="card shadow-lg">
+                                            <div class="card-header">
+                                                <span class="font-weight-bold">Utitlities</span>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <button class="btn btn-primary btn-sm"><i class="fas fa-file-pdf mr-1"></i> Generate CV</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                       </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </section>
@@ -348,7 +388,7 @@
         </div>
     </div>
 
-        <div class="modal fade" id="manage-account-educational-att-edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="manage-account-educational-att-edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
             <div class="modal-header">
@@ -415,5 +455,190 @@
         </div>
     </div>
 
+     <div class="modal fade" id="manage-account-work-exp-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Work Experince</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row my-2">
+                    <div class="col-xl-12 col-md-12 col-sm-12">
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input type="text" name="work-exp-company_name" class="form-control form-control-sm" placeholder="Enter company name">
+                            <span class="error-message text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row my-2">
+                    <div class="col-xl-8 col-md-12 col-sm-12">
+                        <div class="form-group">
+                            <label>Job Title</label>
+                            <input type="text" name="work-exp-job_title" class="form-control form-control-sm" placeholder="Enter job title">
+                            <span class="error-message text-danger"></span>
+                        </div>
+                    </div>
+            
+
+                    <div class="col-xl-4 col-md-12 col-sm-12">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>From</label>
+                                    <input type="number" name="work-exp-from" class="form-control form-control-sm" placeholder="From">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>To</label>
+                                    <input type="number" name="work-exp-to" class="form-control form-control-sm" placeholder="To">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="work-exp-description" class="form-control form-control-sm" style="resize: none" rows="3" placeholder="Enter details"></textarea>
+                        <span class="error-message text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" id="manage-account-work-exp-addbtn" class="btn btn-primary btn-sm">Add</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="manage-account-work-exp-view-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">View Work Experince</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row my-2">
+                    <div class="col-xl-12 col-md-12 col-sm-12">
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input type="text" name="work-exp-view-company_name" class="form-control form-control-sm" placeholder="Enter company name" readonly>
+                            <span class="error-message text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row my-2">
+                    <div class="col-xl-8 col-md-12 col-sm-12">
+                        <div class="form-group">
+                            <label>Job Title</label>
+                            <input type="text" name="work-exp-view-job_title" class="form-control form-control-sm" placeholder="Enter job title" readonly>
+                            <span class="error-message text-danger"></span>
+                        </div>
+                    </div>
+            
+
+                    <div class="col-xl-4 col-md-12 col-sm-12">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>From</label>
+                                    <input type="number" name="work-exp-view-from" class="form-control form-control-sm" placeholder="From" readonly>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>To</label>
+                                    <input type="number" name="work-exp-view-to" class="form-control form-control-sm" placeholder="To" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="work-exp-view-description" class="form-control form-control-sm" style="resize: none" rows="3" placeholder="Enter details" readonly></textarea>
+                        <span class="error-message text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="manage-account-work-exp-edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Work Experince</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="work-exp-id">
+                <div class="row my-2">
+                    <div class="col-xl-12 col-md-12 col-sm-12">
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input type="text" name="work-exp-edit-company_name" class="form-control form-control-sm" placeholder="Enter company name">
+                            <span class="error-message text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row my-2">
+                    <div class="col-xl-8 col-md-12 col-sm-12">
+                        <div class="form-group">
+                            <label>Job Title</label>
+                            <input type="text" name="work-exp-edit-job_title" class="form-control form-control-sm" placeholder="Enter job title">
+                            <span class="error-message text-danger"></span>
+                        </div>
+                    </div>
+            
+
+                    <div class="col-xl-4 col-md-12 col-sm-12">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>From</label>
+                                    <input type="number" name="work-exp-edit-from" class="form-control form-control-sm" placeholder="From">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>To</label>
+                                    <input type="number" name="work-exp-edit-to" class="form-control form-control-sm" placeholder="To">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="work-exp-edit-description" class="form-control form-control-sm" style="resize: none" rows="3" placeholder="Enter details"></textarea>
+                        <span class="error-message text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" id="manage-account-work-exp-updatebtn" class="btn btn-primary btn-sm">Update</button>
+            </div>
+            </div>
+        </div>
+    </div>
     {{-- Modals --}}
 @endsection

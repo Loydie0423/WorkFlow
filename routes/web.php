@@ -70,6 +70,10 @@ Route::group(array('middleware' => array('auth')), function() {
         Route::get('account/educational-attainment/get', array(ApplicantAccountController::class, 'getducationalatt'))->name('applicant.profile.educationalatt.get');
         Route::post('account/educational-attainment/add', array(ApplicantAccountController::class, 'addeducationalatt'))->name('applicant.profile.educationalatt.add');
         Route::post('account/educational-attainment/update', array(ApplicantAccountController::class, 'updateeducationalatt'))->name('applicant.profile.educationalatt.update');
+
+        Route::get('account/work-experience/get', array(ApplicantAccountController::class, 'getworkexp'))->name('applicant.profile.workexp.get');
+        Route::post('account/work-experience/add', array(ApplicantAccountController::class, 'addworkexp'))->name('applicant.profile.workexp.add');
+        Route::post('account/work-experience/update', array(ApplicantAccountController::class, 'updateworkexp'))->name('applicant.profile.workexp.update');
     });
 
     Route::get('account/profile/getcompany', array(CompanyController::class, 'getcurrentcompany'))->name('getcurrentcompany');

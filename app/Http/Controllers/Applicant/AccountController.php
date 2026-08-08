@@ -172,4 +172,58 @@ class AccountController extends Controller
 
         return response()->json(array("result" => false, "message" => $validate["message"], "data" => $validate["data"]));
     }
+
+    public function getworkexp(): JsonResponse 
+    {
+        $data = DB::table("work_experiences AS a")->join("applicants AS b","a.applicant_id","=","b.id")->select("a.id","a.company_name","a.job_title","a.from","a.to","a.description")->where("b.user_id", auth()->user()->id)->get();
+        return response()->json(array("data" => $data));
+    }
+
+    public function validateworkexp(array $data): array 
+    {
+        $errors = array();
+        $validator = Validator::make($data, array(
+            "company_name" => array("required","max:255"),
+            "job_title" => array("required","max:255"),
+            "from" => array("required","numeric","lte:to"),
+            "to" => array("required","numeric","gte:from"),
+            "description" => array("required","max:255")
+        ));
+
+        if($validator->fails()) {
+            foreach($validator->errors()->toArray() AS $key => $item) {
+                $errors[$key] = $item[0];
+            }
+
+            return array("result" => false, "message" => "Validation Error!", "data" => array("errors" => $errors));
+        }
+
+        return array("result" => true, "message" => "Success", "data" => []);
+    }
+
+    public function addworkexp(Request $request): JsonResponse
+    {
+        $data = $request->only("company_name","job_title","from", "to", "description");
+        $validate = $this->validateworkexp($data);    
+        if($validate["result"]) {
+            $this->accservice->saveworkexp($data);
+            $resdata = $this->getworkexp()->getData(true);
+            return response()->json(array("result" => true, "message" => "Success", "data" => $resdata["data"]));
+        }
+
+        return response()->json(array("result" => false, "message" => $validate["message"], "data" => $validate["data"]));
+    }
+
+     public function updateworkexp(Request $request): JsonResponse 
+    {
+        $data = $request->only("id","company_name","job_title","from", "to", "description");
+        $validate = $this->validateworkexp($data);    
+        if($validate["result"]) {
+            $this->accservice->updateworkexp($data);
+            $resdata = $this->getworkexp()->getData(true);
+            return response()->json(array("result" => true, "message" => "Success", "data" => $resdata["data"]));
+        }
+
+        return response()->json(array("result" => false, "message" => $validate["message"], "data" => $validate["data"]));
+    }
 }
